@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  color: #1a2b4a;
+}
+
+/* Light-blue page with a subtle dotted texture (matches the design background) */
+.page-texture {
+  background-color: #eef3fb;
+  background-image: radial-gradient(rgba(22, 66, 155, 0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Slim custom scrollbar used inside the list cards */
+.slim-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #c7d2e6 transparent;
+}
+.slim-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.slim-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 6px 0;
+}
+.slim-scroll::-webkit-scrollbar-thumb {
+  background: #c7d2e6;
+  border-radius: 9999px;
+}
+.slim-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a9b7ce;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
