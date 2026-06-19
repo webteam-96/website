@@ -1,0 +1,23 @@
+// Local copies of real project photos (same-origin so the WebGL gallery can use them).
+export const PROJECT_GALLERY: { image: string; text: string }[] = [
+  {"image": "/projects/proj-0.png", "text": "Planted small…"},
+  {"image": "/projects/proj-1.png", "text": "Vanamahotsava…"},
+  {"image": "/projects/proj-2.png", "text": "Donated steel…"},
+  {"image": "/projects/proj-3.png", "text": "Annadan at old age…"},
+  {"image": "/projects/proj-4.jpeg", "text": "Rotary Yuva Gaurav…"},
+  {"image": "/projects/proj-5.jpeg", "text": "honey agriculture…"},
+  {"image": "/projects/proj-6.jpeg", "text": "Basic Life Support…"},
+  {"image": "/projects/proj-7.jpg", "text": "Felicitation for…"},
+  {"image": "/projects/proj-8.jpeg", "text": "Free Hearing Aid…"},
+  {"image": "/projects/proj-9.jpeg", "text": "Flag exchange"},
+  {"image": "/projects/proj-10.jpeg", "text": "Flag exchange with…"},
+  {"image": "/projects/proj-11.jpg", "text": "Flag Exchange"},
+  {"image": "/projects/proj-12.jpeg", "text": "clean up drive at…"},
+  {"image": "/projects/proj-13.jpeg", "text": "FELICITATION OF TWO…"},
+  {"image": "/projects/proj-14.jpg", "text": "FIT INDIA COMPAIGN"},
+  {"image": "/projects/proj-15.jpeg", "text": "felicitation of…"},
+  {"image": "/projects/proj-16.jpg", "text": "DONATING BLOOD…"},
+  {"image": "/projects/proj-17.jpeg", "text": "Weekly Bulletin - 48"},
+  {"image": "/projects/proj-18.jpeg", "text": "Weekly Bulletin - 47"},
+  {"image": "/projects/proj-19.jpeg", "text": "Inauguration…"},
+]

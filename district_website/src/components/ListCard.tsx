@@ -118,7 +118,7 @@ export default function ListCard({ variant, entries, isLoading = false, onViewAl
 
 function EntryRow({ entry, accent, soft }: { entry: CalendarEntry; accent: string; soft: string }) {
   return (
-    <li className="flex items-center gap-3.5 rounded-xl px-2 py-2.5 transition-colors hover:bg-pagebg">
+    <li className="row-animate flex items-center gap-3.5 rounded-xl px-2 py-2.5 transition-colors hover:bg-pagebg">
       <span
         className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${soft}`}
       >

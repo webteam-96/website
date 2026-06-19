@@ -6,7 +6,7 @@ import type { ReactNode } from 'react'
  */
 export default function DashboardGrid({ children }: { children: ReactNode }) {
   return (
-    <div className="mx-auto max-w-[1440px] px-5 pb-12 sm:px-8">
+    <div className="mx-auto max-w-[1720px] px-5 pb-12 pt-8 sm:px-8">
       <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-4 xl:[&>*]:h-[500px]">
         {children}
       </div>

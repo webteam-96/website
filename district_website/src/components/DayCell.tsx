@@ -52,6 +52,7 @@ const DayCell = forwardRef<HTMLButtonElement, DayCellProps>(function DayCell(
           {markers.hasAnniversary && (
             <span className="h-1.5 w-1.5 rounded-full bg-annivdot" aria-hidden />
           )}
+          {markers.hasEvent && <span className="h-1.5 w-1.5 rounded-full bg-evt" aria-hidden />}
         </span>
       )}
     </button>

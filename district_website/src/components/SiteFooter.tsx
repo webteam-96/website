@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { ChevronRight, Facebook, Link as LinkIcon, Share2, Zap } from 'lucide-react'
+import VisitorCount from './VisitorCount'
 
 const ROTARY_LINKS = ['Rotary.org', 'Rotary Zones 4, 5, 6 & 7', 'Rotary Fellowship', 'Rotary Blog']
 const QUICK_LINKS = ['Home', 'District Committee', 'Clubs Finder', 'Club Projects']
@@ -21,30 +22,31 @@ export default function SiteFooter() {
         style={{ maskImage: FADE_MASK, WebkitMaskImage: FADE_MASK }}
       />
 
-      <div className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-x-8 gap-y-10 px-6 py-14 sm:grid-cols-2 sm:px-8 lg:grid-cols-5">
-        {/* Brand — official district logo on a white panel so it reads on the dark footer */}
-        <div className="flex items-center">
-          <span className="inline-flex items-center rounded-xl bg-white px-4 py-3 shadow-card">
-            <img src="/3170.png" alt="Rotary District 3170" className="h-9 w-auto" />
-          </span>
+      <div className="relative mx-auto grid max-w-[1720px] grid-cols-1 gap-x-6 gap-y-10 px-5 py-14 sm:grid-cols-2 sm:px-8 lg:grid-cols-5">
+        {/* Brand — the same header logo (3170.png), recolored so its blue text
+            is white, shown directly on the navy footer (no white background;
+            the gold wheel is preserved). */}
+        <div className="flex flex-col items-start gap-4">
+          <img src="/3170-white.png" alt="Rotary District 3170" className="h-14 w-auto" />
+          <VisitorCount />
         </div>
 
         {/* Rotary Links */}
-        <FooterColumn title="Rotary Links" icon={<LinkIcon className="h-4 w-4 text-brand-gold" strokeWidth={2.2} />}>
+        <FooterColumn title="Rotary Links" icon={<LinkIcon className="h-3.5 w-3.5 text-white" strokeWidth={2.4} />}>
           {ROTARY_LINKS.map((label) => (
             <FooterLink key={label} label={label} />
           ))}
         </FooterColumn>
 
         {/* Quick Links */}
-        <FooterColumn title="Quick Links" icon={<Zap className="h-4 w-4 text-brand-gold" strokeWidth={2.2} />}>
+        <FooterColumn title="Quick Links" icon={<Zap className="h-3.5 w-3.5 text-white" strokeWidth={2.4} />}>
           {QUICK_LINKS.map((label) => (
             <FooterLink key={label} label={label} />
           ))}
         </FooterColumn>
 
         {/* Social */}
-        <FooterColumn title="Social Media Links" icon={<Share2 className="h-4 w-4 text-brand-gold" strokeWidth={2.2} />}>
+        <FooterColumn title="Social Media Links" icon={<Share2 className="h-3.5 w-3.5 text-white" strokeWidth={2.4} />}>
           <a
             href="#"
             className="flex items-center gap-2.5 text-sm text-white/85 transition-colors hover:text-white"
@@ -55,7 +57,7 @@ export default function SiteFooter() {
         </FooterColumn>
 
         {/* Tagline */}
-        <div className="flex flex-col items-start justify-center sm:col-span-2 lg:col-span-1 lg:items-end">
+        <div className="flex flex-col items-start justify-center sm:col-span-2 lg:col-span-1 lg:items-end lg:border-l lg:border-white/10 lg:pl-6">
           <p className="text-sm font-medium text-white/85 lg:text-right">Together, we</p>
           <p className="-mt-1 font-script text-[42px] font-bold leading-none text-brand-gold">
             Create Change
@@ -76,9 +78,11 @@ function FooterColumn({
   children: ReactNode
 }) {
   return (
-    <div>
-      <h3 className="mb-4 flex items-center gap-2 text-[15px] font-semibold">
-        {icon}
+    <div className="lg:border-l lg:border-white/10 lg:pl-6">
+      <h3 className="mb-4 flex items-center gap-2.5 text-[15px] font-semibold">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2b5fd6] shadow-sm">
+          {icon}
+        </span>
         {title}
       </h3>
       <ul className="space-y-3">{children}</ul>

@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import { ChevronDown, Home, Lock, Menu, UserPlus, X } from 'lucide-react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
+import { ArrowRight, ChevronDown, Menu, UserPlus, X } from 'lucide-react'
 
 interface NavItem {
   label: string
@@ -8,79 +8,152 @@ interface NavItem {
   to?: string
   /** Match the route exactly (used for "/" so it isn't active everywhere). */
   end?: boolean
-  icon?: boolean
   caret?: boolean
+  /** Dropdown sub-items. */
+  children?: { label: string; to: string }[]
 }
 
 const NAV_LINKS: NavItem[] = [
-  { label: 'HOME', to: '/', end: true, icon: true },
-  { label: 'DISTRICT COMMITTEE' },
+  { label: 'HOME', to: '/', end: true },
+  { label: 'DISTRICT COMMITTEE', to: '/district-committee' },
   { label: 'CLUB FINDER', to: '/club-finder' },
-  { label: 'CLUB PROJECTS', caret: true },
-  { label: 'NEWSLETTERS', caret: true },
+  {
+    label: 'CLUB PROJECTS',
+    caret: true,
+    children: [
+      { label: 'Community Service', to: '/club-projects/community-service' },
+      { label: 'Club Service', to: '/club-projects/club-service' },
+      { label: 'Vocational Service', to: '/club-projects/vocational-service' },
+      { label: 'New Generation Service', to: '/club-projects/new-generation-service' },
+      { label: 'International Service', to: '/club-projects/international-service' },
+      { label: 'Public Image', to: '/club-projects/public-image' },
+    ],
+  },
+  {
+    label: 'NEWSLETTERS',
+    caret: true,
+    children: [
+      { label: "Governor's Monthly Letter", to: '/newsletters/governors-letter' },
+      { label: 'Club Newsletter', to: '/newsletters/club-newsletter' },
+    ],
+  },
   { label: 'CALENDAR', to: '/calendar' },
 ]
 
+// A single pill slides between active items (the "magic pill"). The links sit
+// above it (z-[1]); the active link's text is white, idle is dimmed.
 const DESKTOP_BASE =
-  'flex items-center gap-1.5 rounded-md px-3.5 py-2.5 text-[16px] tracking-wide transition-colors'
+  'slot-link relative z-[1] flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2 text-[15px] tracking-wide transition-colors'
 const DESKTOP_ACTIVE = 'font-semibold text-white'
 const DESKTOP_IDLE = 'font-medium text-white/85 hover:text-white'
 
-const MOBILE_BASE = 'flex items-center gap-2 rounded-md px-3 py-3 text-sm font-medium transition-colors'
-const MOBILE_ACTIVE = 'bg-white/10 text-white'
-const MOBILE_IDLE = 'text-white/90 hover:bg-white/10'
-
 export default function TopNav() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  // Which mobile dropdown (by label) is currently expanded, if any.
+  const [openSub, setOpenSub] = useState<string | null>(null)
+  const location = useLocation()
+  const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
+  const [pill, setPill] = useState({ left: 0, top: 0, width: 0, height: 0, visible: false })
+
+  // Which top-level nav route is active (mirrors NavLink's matching).
+  const activePath = useMemo(() => {
+    const m = NAV_LINKS.find(
+      (l) =>
+        l.to &&
+        (l.end
+          ? location.pathname === l.to
+          : location.pathname === l.to || location.pathname.startsWith(l.to + '/')),
+    )
+    return m?.to ?? null
+  }, [location.pathname])
+
+  // Measure the active item so the single pill can slide to it.
+  const measurePill = useCallback(() => {
+    const el = activePath ? itemRefs.current[activePath] : null
+    if (el && el.offsetWidth) {
+      setPill({ left: el.offsetLeft, top: el.offsetTop, width: el.offsetWidth, height: el.offsetHeight, visible: true })
+    } else {
+      setPill((p) => ({ ...p, visible: false }))
+    }
+  }, [activePath])
+
+  useLayoutEffect(measurePill, [measurePill])
+  useEffect(() => {
+    window.addEventListener('resize', measurePill)
+    document.fonts?.ready.then(measurePill).catch(() => {})
+    return () => window.removeEventListener('resize', measurePill)
+  }, [measurePill])
 
   return (
-    <header className="sticky top-0 z-50 bg-brand-blue shadow-sm">
-      <div className="relative mx-auto flex h-20 max-w-[1440px] items-center pr-4 sm:pr-6">
-        {/* Logo on a clean, full-height white panel with a rounded right edge */}
-        <NavLink to="/" className="relative z-10 flex h-full items-center">
-          <span className="flex h-full items-center rounded-r-2xl bg-white pl-5 pr-7 shadow-sm">
-            <img src="/3170.png" alt="Rotary District 3170" className="h-11 w-auto" />
-          </span>
+    <header className="site-header sticky top-0 z-[1000] h-[70px] w-full bg-[#0d47a1] shadow-sm md:h-20">
+      <div className="relative flex h-full w-full items-center pr-4 sm:pr-6">
+        {/* White logo wedge — the clip-path is on this layer only. The blue
+            header behind it shows wherever the wedge is clipped, forming the
+            diagonal transition on the left. */}
+        <div aria-hidden className="logo-curve absolute inset-0 z-[1] bg-white" />
+
+        {/* Logo area (content; never clipped) */}
+        <NavLink
+          to="/"
+          className="logo-area relative z-[2] flex h-full shrink-0 items-center pl-6"
+        >
+          <img src="/3170.png" alt="Rotary District 3170" className="h-9 w-auto md:h-11" />
         </NavLink>
 
-        {/* Center nav (desktop) */}
-        <nav className="ml-6 hidden flex-1 items-center justify-center gap-2 xl:flex">
+        {/* Main nav (desktop) */}
+        <nav className="main-nav relative z-[2] mx-3 hidden min-w-0 flex-1 items-center justify-center gap-1 xl:flex">
+          {/* Single pill that slides to the active item */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute z-0 rounded-full border border-white/60 bg-white/15 transition-all duration-300 ease-out"
+            style={{
+              left: pill.left,
+              top: pill.top,
+              width: pill.width,
+              height: pill.height,
+              opacity: pill.visible ? 1 : 0,
+            }}
+          />
           {NAV_LINKS.map((link) =>
-            link.to ? (
+            link.children ? (
+              <DesktopDropdown key={link.label} link={link} />
+            ) : link.to ? (
               <NavLink
                 key={link.label}
                 to={link.to}
                 end={link.end}
+                ref={(el) => {
+                  itemRefs.current[link.to!] = el
+                }}
                 className={({ isActive }) =>
                   [DESKTOP_BASE, isActive ? DESKTOP_ACTIVE : DESKTOP_IDLE].join(' ')
                 }
               >
-                <NavContent link={link} iconClass="h-[18px] w-[18px]" caretClass="h-4 w-4" />
+                <NavContent link={link} caretClass="h-4 w-4" />
               </NavLink>
             ) : (
               <a key={link.label} href="#" className={[DESKTOP_BASE, DESKTOP_IDLE].join(' ')}>
-                <NavContent link={link} iconClass="h-[18px] w-[18px]" caretClass="h-4 w-4" />
+                <NavContent link={link} caretClass="h-4 w-4" />
               </a>
             ),
           )}
         </nav>
 
-        {/* Right actions (desktop) */}
-        <div className="ml-auto hidden items-center gap-3 xl:flex">
+        {/* Header actions (desktop) */}
+        <div className="header-actions relative z-[2] hidden shrink-0 items-center gap-2.5 xl:flex">
           <button
             type="button"
-            className="flex items-center gap-2 rounded-lg bg-brand-gold px-4 py-2.5 text-[14px] font-semibold text-brand-blue shadow-pill transition-colors hover:bg-brand-goldhover focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+            className="flex items-center gap-2 rounded-lg bg-brand-gold px-4 py-2.5 text-[14px] font-semibold text-[#0d47a1] shadow-pill transition-colors hover:bg-brand-goldhover focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           >
-            <UserPlus className="h-4 w-4" strokeWidth={2} />
+            <UserPlus className="h-4 w-4" strokeWidth={2.25} />
             JOIN ROTARY
           </button>
           <button
             type="button"
-            className="flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-[14px] font-semibold text-brand-blue shadow-pill transition-colors hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+            className="flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-[14px] font-semibold text-[#0d47a1] shadow-pill transition-colors hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           >
-            <Lock className="h-3.5 w-3.5" strokeWidth={2} />
             ADMIN LOGIN
-            <span aria-hidden>→</span>
+            <ArrowRight className="h-4 w-4" strokeWidth={2.25} />
           </button>
         </div>
 
@@ -88,7 +161,7 @@ export default function TopNav() {
         <button
           type="button"
           onClick={() => setMobileOpen((o) => !o)}
-          className="ml-auto flex h-10 w-10 items-center justify-center rounded-md text-white hover:bg-white/10 xl:hidden"
+          className="relative z-[2] ml-auto flex h-10 w-10 items-center justify-center rounded-md text-white hover:bg-white/10 xl:hidden"
           aria-label="Toggle navigation menu"
           aria-expanded={mobileOpen}
         >
@@ -96,43 +169,79 @@ export default function TopNav() {
         </button>
       </div>
 
-      {/* Mobile menu panel */}
+      {/* Mobile / tablet menu — big, left-aligned, animated "text roll" links */}
       {mobileOpen && (
-        <nav className="border-t border-white/10 bg-brand-blue px-4 pb-4 xl:hidden">
-          <ul className="flex flex-col py-2">
-            {NAV_LINKS.map((link) => (
-              <li key={link.label}>
-                {link.to ? (
+        <nav className="border-t border-white/10 bg-[#0d47a1] px-6 pb-8 pt-5 xl:hidden">
+          <ul className="flex flex-col gap-1.5">
+            {NAV_LINKS.map((link) =>
+              link.children ? (
+                <li key={link.label}>
+                  <button
+                    type="button"
+                    onClick={() => setOpenSub((s) => (s === link.label ? null : link.label))}
+                    aria-expanded={openSub === link.label}
+                    className="slot-link flex w-full items-center justify-between gap-3 py-1.5 text-[30px] font-extrabold uppercase leading-[0.95] tracking-tight text-white/90 transition-colors hover:text-white sm:text-[38px]"
+                  >
+                    <span className="sr-only">{link.label}</span>
+                    <SlotText text={link.label} />
+                    <ChevronDown
+                      className={`h-7 w-7 shrink-0 text-brand-gold transition-transform duration-200 ${
+                        openSub === link.label ? 'rotate-180' : ''
+                      }`}
+                      strokeWidth={2.5}
+                    />
+                  </button>
+                  {openSub === link.label && (
+                    <ul className="mb-2 mt-1.5 flex flex-col gap-0.5 border-l-2 border-brand-gold/40 pl-4">
+                      {link.children.map((c) => (
+                        <li key={c.label}>
+                          <NavLink
+                            to={c.to}
+                            onClick={() => setMobileOpen(false)}
+                            className={({ isActive }) =>
+                              `block py-1.5 text-[15px] font-semibold uppercase tracking-wide transition-colors ${
+                                isActive ? 'text-brand-gold' : 'text-white/75 hover:text-white'
+                              }`
+                            }
+                          >
+                            {c.label}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ) : link.to ? (
+                <li key={link.label}>
                   <NavLink
                     to={link.to}
                     end={link.end}
                     onClick={() => setMobileOpen(false)}
                     className={({ isActive }) =>
-                      [MOBILE_BASE, isActive ? MOBILE_ACTIVE : MOBILE_IDLE].join(' ')
+                      `slot-link block w-fit py-1.5 text-[30px] font-extrabold uppercase leading-[0.95] tracking-tight transition-colors sm:text-[38px] ${
+                        isActive ? 'text-brand-gold' : 'text-white/90 hover:text-white'
+                      }`
                     }
                   >
-                    <NavContent link={link} iconClass="h-4 w-4" caretClass="h-4 w-4" />
+                    <span className="sr-only">{link.label}</span>
+                    <SlotText text={link.label} />
                   </NavLink>
-                ) : (
-                  <a href="#" className={[MOBILE_BASE, MOBILE_IDLE].join(' ')}>
-                    <NavContent link={link} iconClass="h-4 w-4" caretClass="h-4 w-4" />
-                  </a>
-                )}
-              </li>
-            ))}
+                </li>
+              ) : null,
+            )}
           </ul>
-          <div className="flex flex-col gap-2.5 pt-2">
+          <div className="mt-7 flex flex-col gap-2.5">
             <button
               type="button"
-              className="flex items-center justify-center gap-2 rounded-lg bg-brand-gold px-4 py-3 text-sm font-semibold text-brand-blue"
+              className="flex items-center justify-center gap-2 rounded-lg bg-brand-gold px-4 py-3 text-sm font-semibold text-[#0d47a1]"
             >
               <UserPlus className="h-4 w-4" /> JOIN ROTARY
             </button>
             <button
               type="button"
-              className="flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-semibold text-brand-blue"
+              className="flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-semibold text-[#0d47a1]"
             >
-              <Lock className="h-3.5 w-3.5" /> ADMIN LOGIN →
+              ADMIN LOGIN <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </nav>
@@ -141,20 +250,66 @@ export default function TopNav() {
   )
 }
 
-function NavContent({
-  link,
-  iconClass,
-  caretClass,
-}: {
-  link: NavItem
-  iconClass: string
-  caretClass: string
-}) {
+function NavContent({ link, caretClass }: { link: NavItem; caretClass: string }) {
   return (
     <>
-      {link.icon && <Home className={iconClass} strokeWidth={1.75} />}
-      {link.label}
+      <span className="sr-only">{link.label}</span>
+      <SlotText text={link.label} />
       {link.caret && <ChevronDown className={`${caretClass} opacity-80`} strokeWidth={2} />}
     </>
+  )
+}
+
+/** Desktop nav label rendered as per-letter "slot machine" reels (see .slot-*
+ *  in index.css). Decorative/aria-hidden — pair with an sr-only label. */
+function SlotText({ text }: { text: string }) {
+  return (
+    <span className="slot-text" aria-hidden="true">
+      {[...text].map((ch, i) => {
+        const c = ch === ' ' ? ' ' : ch
+        return (
+          <span key={i} className="slot-col">
+            <span className="slot-reel" style={{ '--d': `${i * 45}ms` } as CSSProperties}>
+              <span>{c}</span>
+              <span>{c}</span>
+              <span>{c}</span>
+              <span>{c}</span>
+            </span>
+          </span>
+        )
+      })}
+    </span>
+  )
+}
+
+/** Desktop nav item with a hover/focus dropdown of sub-pages. */
+function DesktopDropdown({ link }: { link: NavItem }) {
+  return (
+    <div className="group relative">
+      <button type="button" className={[DESKTOP_BASE, DESKTOP_IDLE].join(' ')}>
+        <span className="sr-only">{link.label}</span>
+        <SlotText text={link.label} />
+        <ChevronDown className="h-4 w-4 opacity-80 transition-transform group-hover:rotate-180" strokeWidth={2} />
+      </button>
+      {/* pt-2 keeps a hover bridge between the button and the menu */}
+      <div className="invisible absolute left-1/2 top-full z-50 w-60 -translate-x-1/2 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+        <ul className="overflow-hidden rounded-xl bg-white py-1.5 shadow-card ring-1 ring-divider">
+          {link.children!.map((c) => (
+            <li key={c.label}>
+              <NavLink
+                to={c.to}
+                className={({ isActive }) =>
+                  `block px-4 py-2.5 text-sm font-medium transition-colors ${
+                    isActive ? 'bg-brand-blue/5 text-brand-blue' : 'text-ink hover:bg-pagebg'
+                  }`
+                }
+              >
+                {c.label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   )
 }

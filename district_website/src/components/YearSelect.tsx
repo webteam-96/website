@@ -16,7 +16,7 @@ export default function YearSelect({ value, onChange, options = DEFAULT_OPTIONS 
         value={value}
         onChange={(e) => onChange(e.target.value)}
         aria-label="Select Rotary year"
-        className="appearance-none rounded-lg border border-divider bg-white py-2 pl-4 pr-10 text-[13px] font-semibold text-ink shadow-soft transition-colors hover:border-brand-blue/40 focus:border-brand-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue/30"
+        className="appearance-none rounded-full border border-white/60 bg-white/55 py-2 pl-4 pr-10 text-[13px] font-semibold text-ink shadow-sm ring-1 ring-inset ring-white/60 backdrop-blur-md transition-colors hover:bg-white/80 focus:border-brand-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue/30"
       >
         {options.map((opt) => (
           <option key={opt} value={opt}>

@@ -30,9 +30,12 @@ export const mockEntries: Record<string, CalendarEntry[]> = {
     { id: 'a6', name: 'Mahesh & Sunita Deshpande', date: '2026-06-17', type: 'anniversary', clubName: 'RC Ichalkaranji' },
     { id: 'a7', name: 'Anil Kumar Shinde', date: '2026-06-24', type: 'anniversary', clubName: 'RC Karad' },
 
-    // ---- Events ----
-    // Empty by default to mirror the "No Data Found..!" state in the design.
-    // Add CalendarEntry objects with type 'event' here to populate the card.
+    // ---- Events ---- (date-specific, not recurring)
+    { id: 'e1', name: 'District Installation Ceremony', date: '2026-06-07', type: 'event', clubName: 'RID 3170' },
+    { id: 'e2', name: 'Club Presidents Meet', date: '2026-06-13', type: 'event', clubName: 'RID 3170' },
+    { id: 'e3', name: 'Polio Awareness Drive', date: '2026-06-19', type: 'event', clubName: 'RC Kolhapur' },
+    { id: 'e4', name: 'Membership Growth Seminar', date: '2026-06-23', type: 'event', clubName: 'RC Sangli' },
+    { id: 'e5', name: 'Tree Plantation Drive', date: '2026-06-28', type: 'event', clubName: 'RC Satara' },
   ],
   '2024-2025': [],
   '2026-2027': [],

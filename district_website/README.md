@@ -49,7 +49,6 @@ src/
    ├─ WeekdayRow.tsx
    ├─ DayCell.tsx            # number + marker dots + today state
    ├─ Legend.tsx
-   ├─ RotaryLogo.tsx         # SVG Rotary wheel
    └─ SiteFooter.tsx         # dark gradient footer
 ```
 
