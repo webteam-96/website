@@ -1,2 +1,14 @@
 # Claude Code local (machine-specific) settings
 .claude/settings.local.json
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+dist/
+**/dist/
+
+# Logs
+*.log
+npm-debug.log*

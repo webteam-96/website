@@ -1,0 +1,9 @@
+{
+  "name": "rotary-sites",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Monorepo of Rotary Vite sites, each built into dist/<site>/ for Vercel.",
+  "scripts": {
+    "build": "node build-all.mjs"
+  }
+}
