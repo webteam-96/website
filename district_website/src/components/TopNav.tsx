@@ -97,7 +97,7 @@ export default function TopNav() {
           to="/"
           className="logo-area relative z-[2] flex h-full shrink-0 items-center pl-6"
         >
-          <img src="/3170.png" alt="Rotary District 3170" className="h-9 w-auto md:h-11" />
+          <img src={`${import.meta.env.BASE_URL}3170.png`} alt="Rotary District 3170" className="h-9 w-auto md:h-11" />
         </NavLink>
 
         {/* Main nav (desktop) */}

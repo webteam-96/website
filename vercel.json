@@ -3,5 +3,8 @@
   "framework": null,
   "installCommand": "npm install",
   "buildCommand": "node build-all.mjs",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/district_website/:path*", "destination": "/district_website/index.html" }
+  ]
 }

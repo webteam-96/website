@@ -1,4 +1,7 @@
 // Local copies of real project photos (same-origin so the WebGL gallery can use them).
+// `BASE` (Vite's base, e.g. "/district_website/") is prepended so the images
+// resolve correctly when the app is served from a sub-path.
+const BASE = import.meta.env.BASE_URL
 export const PROJECT_GALLERY: { image: string; text: string }[] = [
   {"image": "/projects/proj-0.png", "text": "Planted small…"},
   {"image": "/projects/proj-1.png", "text": "Vanamahotsava…"},
@@ -20,4 +23,4 @@ export const PROJECT_GALLERY: { image: string; text: string }[] = [
   {"image": "/projects/proj-17.jpeg", "text": "Weekly Bulletin - 48"},
   {"image": "/projects/proj-18.jpeg", "text": "Weekly Bulletin - 47"},
   {"image": "/projects/proj-19.jpeg", "text": "Inauguration…"},
-]
+].map((p) => ({ ...p, image: `${BASE}${p.image.replace(/^\//, '')}` }))

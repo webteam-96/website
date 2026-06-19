@@ -15,7 +15,7 @@ export default function SiteFooter() {
 
       {/* Decorative banner (waves + people + gear) anchored right, faded on the left */}
       <img
-        src="/footer_banner.png"
+        src={`${import.meta.env.BASE_URL}footer_banner.png`}
         alt=""
         aria-hidden
         className="pointer-events-none absolute bottom-0 right-0 h-full w-auto max-w-[70%] object-cover object-right opacity-90"
@@ -27,7 +27,7 @@ export default function SiteFooter() {
             is white, shown directly on the navy footer (no white background;
             the gold wheel is preserved). */}
         <div className="flex flex-col items-start gap-4">
-          <img src="/3170-white.png" alt="Rotary District 3170" className="h-14 w-auto" />
+          <img src={`${import.meta.env.BASE_URL}3170-white.png`} alt="Rotary District 3170" className="h-14 w-auto" />
           <VisitorCount />
         </div>
 

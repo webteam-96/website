@@ -10,7 +10,8 @@ export interface NewsletterItem {
   pdf: string
 }
 
-const GOV_PDFS = ['/newsletters/governor-jun-2026.pdf', '/newsletters/governor-may-2026.pdf']
+const BASE = import.meta.env.BASE_URL
+const GOV_PDFS = [`${BASE}newsletters/governor-jun-2026.pdf`, `${BASE}newsletters/governor-may-2026.pdf`]
 
 const MONTHS = [
   'June 2026', 'May 2026', 'April 2026', 'March 2026', 'February 2026', 'January 2026',
