@@ -1,0 +1,290 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
+  }
+  .label-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.2em] text-gold;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-5 py-2.5 text-sm font-semibold transition-all duration-200;
+  }
+  .btn-gold {
+    @apply btn bg-gold text-navy hover:bg-gold-light hover:scale-[1.03] hover:shadow-lg;
+  }
+  .btn-navy {
+    @apply btn bg-navy text-white hover:bg-navy-deep hover:scale-[1.03] hover:shadow-lg;
+  }
+  .btn-outline-white {
+    @apply btn border border-white/70 text-white hover:bg-white hover:text-navy hover:scale-[1.03];
+  }
+}
+
+/* Hide scrollbar for horizontal scroll rows */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Fade-up reveal for the Impact section states */
+@keyframes impact-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.impact-in {
+  animation: impact-in 0.45s ease both;
+}
+
+/* Subtle dotted texture for the Impact backdrop */
+.impact-dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+}
+
+/* Sweeping sheen for the CTA button */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-20deg);
+  animation: shine 3.8s ease-in-out infinite;
+}
+@keyframes shine {
+  0% {
+    left: -150%;
+  }
+  55%,
+  100% {
+    left: 150%;
+  }
+}
+
+/* ── Reveal-on-scroll (IntersectionObserver toggles .is-visible) ──── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+/* directional hidden states */
+.reveal-down {
+  transform: translateY(-28px);
+}
+.reveal-left {
+  transform: translateX(-42px);
+}
+.reveal-right {
+  transform: translateX(42px);
+}
+.reveal-zoom {
+  transform: scale(0.92);
+}
+.reveal-fade {
+  transform: none;
+}
+/* shared resting (visible) state — wins via specificity */
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+/* the CTA gets an extra scale "pop" as it lands */
+.reveal-pop {
+  transform: translateY(26px) scale(0.9);
+}
+.reveal-pop.is-visible {
+  transform: translateY(0) scale(1);
+}
+
+/* ── Split-text heading animation + per-letter hover ──────────────── */
+.split-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+.split-space {
+  display: inline-block;
+  width: 0.28em;
+}
+.split-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.62em) rotate(8deg);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s ease;
+  will-change: opacity, transform;
+}
+.split.is-visible .split-char {
+  opacity: 1;
+  transform: none;
+}
+/* micro-interaction: letters lift + turn gold under the cursor */
+.split.is-visible .split-char:hover {
+  color: #f7a600;
+  transform: translateY(-6px) scale(1.15);
+  transition-delay: 0s;
+}
+
+/* Hero text re-animates on every slide change (keyed remount) */
+@keyframes hero-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-slide-in > * {
+  opacity: 0;
+  animation: hero-slide-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.hero-slide-in > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.hero-slide-in > *:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.hero-slide-in > *:nth-child(3) {
+  animation-delay: 0.25s;
+}
+.hero-slide-in > *:nth-child(4) {
+  animation-delay: 0.35s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-pop,
+  .hero-slide-in > *,
+  .split-char {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ── Interactive CTA: "View Our Project Impact" ───────────────────── */
+
+/* Magnetic pull: the button drifts toward the cursor (vars set in JS) */
+.cta-magnetic {
+  transform: translate(var(--tx, 0px), var(--ty, 0px));
+  transition: transform 0.18s ease-out;
+}
+
+/* Spotlight that follows the pointer across the button surface */
+.cta-spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    130px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.6),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.cta-spotlight:hover::before {
+  opacity: 1;
+}
+
+/* Expanding rings that radiate out from the button (attention pulse) */
+@keyframes cta-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+.cta-ring {
+  animation: cta-ring 2.4s ease-out infinite;
+}
+.cta-ring-delayed {
+  animation: cta-ring 2.4s ease-out infinite;
+  animation-delay: 1.2s;
+}
+
+/* Arrow nudges to the right repeatedly, more on hover */
+@keyframes cta-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+.cta-arrow {
+  animation: cta-nudge 1.3s ease-in-out infinite;
+}
+.group\/cta:hover .cta-arrow {
+  animation-duration: 0.7s;
+}
+
+/* Icon gives a gentle wiggle to feel alive */
+@keyframes cta-wiggle {
+  0%,
+  92%,
+  100% {
+    transform: rotate(0deg);
+  }
+  94% {
+    transform: rotate(-9deg);
+  }
+  97% {
+    transform: rotate(9deg);
+  }
+}
+.cta-icon {
+  animation: cta-wiggle 2.8s ease-in-out infinite;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cta-ring,
+  .cta-ring-delayed,
+  .cta-arrow,
+  .cta-icon {
+    animation: none;
+  }
+  .cta-magnetic {
+    transform: none;
+  }
+}
