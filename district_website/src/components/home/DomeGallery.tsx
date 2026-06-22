@@ -124,8 +124,9 @@ export default function DomeGallery({
   openedImageHeight = '350px',
   imageBorderRadius = '30px',
   openedImageBorderRadius = '30px',
-  grayscale = true
-}) {
+  grayscale = true,
+  onImageClick = null
+}: any) {
   const rootRef = useRef(null);
   const mainRef = useRef(null);
   const sphereRef = useRef(null);
@@ -577,15 +578,28 @@ export default function DomeGallery({
     [enlargeTransitionMs, lockScroll, openedImageHeight, openedImageWidth, segments, unlockScroll]
   );
 
+  const emitImageClick = useCallback(
+    el => {
+      const src = el.parentElement?.dataset?.src || el.querySelector('img')?.src || '';
+      const alt = el.querySelector('img')?.alt || '';
+      if (src) onImageClick({ src, alt });
+    },
+    [onImageClick]
+  );
+
   const onTileClick = useCallback(
     e => {
       if (draggingRef.current) return;
       if (movedRef.current) return;
       if (performance.now() - lastDragEndAt.current < 80) return;
       if (openingRef.current) return;
+      if (onImageClick) {
+        emitImageClick(e.currentTarget);
+        return;
+      }
       openItemFromElement(e.currentTarget);
     },
-    [openItemFromElement]
+    [openItemFromElement, onImageClick, emitImageClick]
   );
 
   const onTilePointerUp = useCallback(
@@ -595,9 +609,13 @@ export default function DomeGallery({
       if (movedRef.current) return;
       if (performance.now() - lastDragEndAt.current < 80) return;
       if (openingRef.current) return;
+      if (onImageClick) {
+        emitImageClick(e.currentTarget);
+        return;
+      }
       openItemFromElement(e.currentTarget);
     },
-    [openItemFromElement]
+    [openItemFromElement, onImageClick, emitImageClick]
   );
 
   useEffect(() => {

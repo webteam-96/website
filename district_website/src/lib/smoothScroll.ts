@@ -13,3 +13,13 @@ export function scrollToTopImmediate(): void {
   if (lenis) lenis.scrollTo(0, { immediate: true })
   else if (typeof window !== 'undefined') window.scrollTo(0, 0)
 }
+
+/** Pause scrolling (e.g. while a modal/lightbox is open). */
+export function stopScroll(): void {
+  lenis?.stop()
+}
+
+/** Resume scrolling after a stopScroll(). */
+export function startScroll(): void {
+  lenis?.start()
+}

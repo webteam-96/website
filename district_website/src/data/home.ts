@@ -132,14 +132,16 @@ export const featuredProjects: FeaturedProject[] = [
 export interface UpcomingEvent {
   day: string
   month: string
+  /** Full year of the event — used to derive the weekday name. */
+  year: number
   title: string
   location: string
   time: string
 }
 export const upcomingEvents: UpcomingEvent[] = [
-  { day: '25', month: 'AUG', title: 'District Assembly 2025-26', location: 'Rotary Bhavan, Pune', time: '10:00 AM – 04:00 PM' },
-  { day: '12', month: 'JUL', title: 'Club Secretary Training Session', location: 'Online (Zoom)', time: '06:00 PM – 08:00 PM' },
-  { day: '18', month: 'JUL', title: 'District Conference 2025', location: 'Pune, Maharashtra', time: '09:00 AM Onwards' },
+  { day: '25', month: 'AUG', year: 2025, title: 'District Assembly 2025-26', location: 'Rotary Bhavan, Pune', time: '10:00 AM – 04:00 PM' },
+  { day: '12', month: 'JUL', year: 2025, title: 'Club Secretary Training Session', location: 'Online (Zoom)', time: '06:00 PM – 08:00 PM' },
+  { day: '18', month: 'JUL', year: 2025, title: 'District Conference 2025', location: 'Pune, Maharashtra', time: '09:00 AM Onwards' },
 ]
 
 export interface Leader {

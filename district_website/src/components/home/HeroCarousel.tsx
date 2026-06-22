@@ -28,6 +28,8 @@ interface HeroCarouselProps {
   className?: string
   /** accessible region label */
   label?: string
+  /** how slide images fill the box: 'cover' (crop) or 'contain' (centred, whole image) */
+  fit?: 'cover' | 'contain'
 }
 
 /**
@@ -45,6 +47,7 @@ export default function HeroCarousel({
   badge,
   className = '',
   label,
+  fit = 'cover',
 }: HeroCarouselProps) {
   const count = slides.length
   const loop = count > 1
@@ -107,7 +110,7 @@ export default function HeroCarousel({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl bg-brand-bluedark shadow-card ring-1 ring-divider/40 ${className}`}
+      className={`relative overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-divider/40 ${className}`}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       role="region"
@@ -125,7 +128,7 @@ export default function HeroCarousel({
               src={slide.image}
               alt={slide.alt}
               loading={i <= 1 ? 'eager' : 'lazy'}
-              className="h-full w-full object-cover"
+              className={`h-full w-full ${fit === 'contain' ? 'object-contain' : 'object-cover'}`}
             />
           )
           return slide.href ? (
@@ -177,7 +180,7 @@ export default function HeroCarousel({
               aria-label={`Go to slide ${i + 1}`}
               aria-current={i === realIndex}
               className={`h-2.5 rounded-full transition-all ${
-                i === realIndex ? 'w-6 bg-brand-gold' : 'w-2.5 bg-white/70 hover:bg-white'
+                i === realIndex ? 'w-6 bg-brand-gold' : 'w-2.5 bg-brand-bluedark/25 hover:bg-brand-bluedark/40'
               }`}
             />
           ))}

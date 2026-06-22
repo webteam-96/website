@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom'
 import { Clock } from 'lucide-react'
 import { upcomingEvents } from '../../data/home'
 
+const MONTHS: Record<string, number> = {
+  JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5,
+  JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11,
+}
+
+/** Full weekday name (e.g. "Monday") derived from the event's real date. */
+function weekdayOf(year: number, month: string, day: string): string {
+  const m = MONTHS[month.toUpperCase()] ?? 0
+  return new Date(year, m, Number(day)).toLocaleDateString('en-US', { weekday: 'long' })
+}
+
 /**
  * UpcomingEventsSection — COLUMN block.
  * Renders ONLY its white card (h-full); a parent grid handles layout.
@@ -20,30 +31,48 @@ export default function UpcomingEventsSection() {
         </Link>
       </div>
 
-      {/* Vertical event list */}
-      <ul className="relative mt-4 flex flex-col divide-y divide-divider">
-        <span
-          className="pointer-events-none absolute left-[22px] top-3 bottom-3 w-px bg-divider"
-          aria-hidden
-        />
+      {/* Green pill event cards */}
+      <ul className="mt-4 flex flex-col gap-4">
         {upcomingEvents.map((event) => (
-          <li key={`${event.day}-${event.month}-${event.title}`} className="relative flex gap-4 py-3 first:pt-0 last:pb-0">
-            {/* Navy date badge */}
-            <div className="relative z-10 flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-xl bg-brand-blue text-white ring-2 ring-white">
-              <span className="text-[16px] font-extrabold leading-none">{event.day}</span>
-              <span className="mt-1 text-[11px] font-semibold uppercase leading-none tracking-wide">
-                {event.month}
-              </span>
-            </div>
+          <li
+            key={`${event.day}-${event.month}-${event.title}`}
+            className="overflow-hidden rounded-[18px] bg-[#b6e62e] shadow-sm"
+          >
+            <div className="flex min-h-[78px] items-stretch">
+              {/* Date block */}
+              <div className="flex w-[84px] shrink-0 flex-col items-center justify-center px-2 text-center text-[#111]">
+                <span className="text-[34px] font-extrabold leading-none">{event.day}</span>
+                <span className="mt-1 text-[14px] font-bold uppercase leading-none tracking-wide">
+                  {event.month}
+                </span>
+              </div>
 
-            {/* Event details */}
-            <div className="min-w-0 flex-1">
-              <h3 className="text-[14px] font-bold text-brand-blue">{event.title}</h3>
-              <p className="mt-1.5 truncate text-[12px] text-muted">{event.location}</p>
-              <p className="mt-1 flex items-center gap-1.5 text-[12px] text-muted">
-                <Clock className="h-3.5 w-3.5 shrink-0 text-muted" aria-hidden="true" />
-                <span className="truncate">{event.time}</span>
-              </p>
+              {/* Purple arrow pointer */}
+              <div className="flex shrink-0 items-center" aria-hidden>
+                <span className="h-0 w-0 border-y-8 border-l-[10px] border-y-transparent border-l-[#7d2a82]" />
+              </div>
+
+              {/* White content card */}
+              <div className="my-[7px] ml-1 min-w-0 flex-1 rounded-[14px] bg-white px-4 py-2.5">
+                <p className="flex items-center gap-1.5 text-[13px] font-semibold text-[#7d2a82]">
+                  <Clock className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                  <span className="truncate">{event.time}</span>
+                </p>
+                <h3 className="mt-0.5 text-[16px] font-bold leading-snug text-[#111]">
+                  {event.title}
+                </h3>
+                <p className="text-[14px] font-semibold text-[#222]">{event.location}</p>
+              </div>
+
+              {/* Vertical weekday label */}
+              <div className="flex w-[26px] shrink-0 items-center justify-center">
+                <span
+                  className="text-[12px] font-bold leading-none text-[#111]"
+                  style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+                >
+                  {weekdayOf(event.year, event.month, event.day)}
+                </span>
+              </div>
             </div>
           </li>
         ))}

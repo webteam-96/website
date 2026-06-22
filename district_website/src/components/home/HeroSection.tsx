@@ -21,6 +21,7 @@ export default function HeroSection() {
             slides={heroSlides}
             autoplayMs={5000}
             label="District highlights"
+            fit="contain"
             className="h-[260px] sm:h-[360px] lg:h-[440px]"
           />
 
@@ -30,6 +31,7 @@ export default function HeroSection() {
             autoplayMs={6500}
             badge="Advertisement"
             label="Advertisements"
+            fit="contain"
             className="h-[220px] lg:h-[440px]"
           />
         </div>

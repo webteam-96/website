@@ -4,7 +4,6 @@ import DistrictSnapshotSection from './home/DistrictSnapshotSection'
 import ProjectsGallerySection from './home/ProjectsGallerySection'
 import UpcomingEventsSection from './home/UpcomingEventsSection'
 import PhotoGallerySection from './home/PhotoGallerySection'
-import JoinCtaSection from './home/JoinCtaSection'
 import Reveal from './Reveal'
 
 /**
@@ -16,6 +15,12 @@ export default function HomePage() {
     <main className="flex-1 bg-[#f5f8fc]">
       <HeroSection />
 
+      <Reveal>
+        <DistrictSnapshotSection />
+      </Reveal>
+
+      <ProjectsGallerySection />
+
       <div className="mx-auto max-w-[1200px] px-5 py-8 sm:px-8">
         <Reveal>
           <div className="grid items-stretch gap-5 lg:grid-cols-2">
@@ -25,13 +30,7 @@ export default function HomePage() {
         </Reveal>
       </div>
 
-      <ProjectsGallerySection />
-      <Reveal>
-        <DistrictSnapshotSection />
-      </Reveal>
-
       <PhotoGallerySection />
-      <JoinCtaSection />
     </main>
   )
 }
