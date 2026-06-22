@@ -26,7 +26,6 @@ export default function SplitText({
   }, [threshold])
 
   const words = String(text).split(' ')
-  let idx = -1
 
   return (
     <Tag
@@ -38,12 +37,14 @@ export default function SplitText({
       {words.map((word, w) => (
         <span key={w} className="split-word" aria-hidden="true">
           {[...word].map((ch, c) => {
-            idx += 1
+            // word leads the cascade; letters trail it; clamp so long
+            // headings never drag (max ~520ms before the last glyph starts)
+            const delay = shown ? Math.min(w * 90 + c * charDelay, 520) : 0
             return (
               <span
                 key={c}
                 className="split-char"
-                style={{ transitionDelay: shown ? `${idx * charDelay}ms` : '0ms' }}
+                style={{ transitionDelay: `${delay}ms` }}
               >
                 {ch}
               </span>

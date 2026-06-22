@@ -4,12 +4,13 @@ import Logo from './Logo'
 
 const links = [
   { label: 'HOME', href: '#/' },
-  { label: 'ABOUT US', href: '#/about' },
-  { label: 'PROJECTS', href: '#' },
-  { label: 'EVENTS', href: '#' },
-  { label: 'NEWSLETTERS', href: '#' },
-  { label: 'DIRECTORY', href: '#/directors' },
-  { label: 'CONTACT US', href: '#' },
+  { label: 'ABOUT', href: '#/about' },
+  { label: 'DIRECTORS', href: '#/directors' },
+  { label: 'DIRECTORY', href: '#/directory' },
+  { label: 'CALENDAR', href: '#/calendar' },
+  { label: 'PROJECTS', href: '#/projects' },
+  { label: 'MEETINGS', href: '#/meetings' },
+  { label: 'PAST PRESIDENT', href: '#/past-presidents' },
 ]
 
 export default function Navbar() {
@@ -62,7 +63,7 @@ export default function Navbar() {
           </nav>
 
           <div className="hidden items-center gap-2 lg:flex">
-            <a href="#" className="btn-navy !rounded-full">
+            <a href="#" data-magnetic className="btn-navy !rounded-full">
               JOIN ROTARY
             </a>
           </div>

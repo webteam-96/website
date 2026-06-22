@@ -1,16 +1,22 @@
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-react'
+import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
 import { GearMark } from './Logo'
 
 const quickLinks = [
   { label: 'Home', href: '#/' },
   { label: 'About Us', href: '#/about' },
-  { label: 'Projects', href: '#' },
-  { label: 'Events', href: '#' },
-  { label: 'Newsletters', href: '#' },
-  { label: 'Directory', href: '#/directors' },
-  { label: 'Contact Us', href: '#' },
+  { label: 'Directors', href: '#/directors' },
+  { label: 'Directory', href: '#/directory' },
+  { label: 'Calendar', href: '#/calendar' },
+  { label: 'Projects', href: '#/projects' },
+  { label: 'Newsletters', href: '#/newsletter' },
+  { label: 'Past Presidents', href: '#/past-presidents' },
 ]
-const socials = [Facebook, Twitter, Instagram, Linkedin, Youtube]
+const socials = [
+  { Icon: Facebook, href: 'https://www.facebook.com/rcthanehills/' },
+  { Icon: Twitter, href: 'https://twitter.com/RCThaneHills' },
+  { Icon: Instagram, href: 'https://www.instagram.com/rotaryclubofthanehills/?hl=en' },
+  { Icon: Linkedin, href: 'https://www.linkedin.com/company/rotary-club-of-thane-hills/' },
+]
 
 function Column({ title, items }) {
   return (
@@ -45,10 +51,12 @@ export default function Footer() {
             people across Thane through fellowship and service.
           </p>
           <div className="mt-5 flex gap-3">
-            {socials.map((Icon, i) => (
+            {socials.map(({ Icon, href }) => (
               <a
-                key={i}
-                href="#"
+                key={href}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-gold hover:text-navy"
               >
                 <Icon className="h-4 w-4" />
@@ -65,7 +73,7 @@ export default function Footer() {
           <ul className="space-y-3 text-sm text-white/70">
             <li className="flex items-start gap-3">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-              Rotary Hall, Gokhale Road, Thane (W), Maharashtra 400602
+              Smt. Savitridevi Thirani High School, Road No. 1, Vartak Nagar, Thane West, Maharashtra 400606
             </li>
             <li className="flex items-center gap-3">
               <Phone className="h-4 w-4 shrink-0 text-gold" />
@@ -73,7 +81,7 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-3">
               <Mail className="h-4 w-4 shrink-0 text-gold" />
-              <a href="mailto:info@rcthanehills.org" className="hover:text-gold">info@rcthanehills.org</a>
+              <a href="mailto:samir_limaye@rediffmail.com" className="hover:text-gold">samir_limaye@rediffmail.com</a>
             </li>
           </ul>
         </div>

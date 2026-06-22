@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react'
 import { GearMark } from './Logo'
 import Reveal from './Reveal'
 import SplitText from './SplitText'
+import SpotlightCard from './SpotlightCard'
 
 const leaders = [
   {
@@ -47,7 +48,7 @@ export default function Dignitaries() {
         <div className="grid grid-cols-1 gap-6 pt-20 sm:grid-cols-2 lg:grid-cols-4">
           {leaders.map((l, i) => (
             <Reveal key={l.name} variant="up" delay={i * 120}>
-              <div className="group relative rounded-2xl border border-white/15 bg-navy px-6 pb-7 pt-16 text-center shadow-card transition-transform duration-300 hover:-translate-y-1.5">
+              <SpotlightCard className="group relative rounded-2xl border border-white/15 bg-navy px-6 pb-7 pt-16 text-center shadow-card transition-transform duration-300 hover:-translate-y-1.5">
               {/* lighter inner border frame */}
               <span className="pointer-events-none absolute inset-[5px] rounded-[14px] border border-white/15" />
 
@@ -73,7 +74,7 @@ export default function Dignitaries() {
               >
                 View Profile <ArrowRight className="h-3 w-3" />
               </a>
-              </div>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>

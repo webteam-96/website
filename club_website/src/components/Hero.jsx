@@ -1,34 +1,17 @@
-import { useState } from 'react'
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { banners, advertisement } from '../data/site'
 
-const slides = [
-  {
-    img: 'https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&w=1400&q=80',
-    eyebrow: 'TOGETHER, WE',
-    title: 'Create Lasting Change',
-    accent: 'in Our Community',
-    text: 'Empowering lives through service, fellowship and meaningful projects across Thane.',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1400&q=80',
-    eyebrow: 'SERVICE ABOVE SELF',
-    title: 'Building Brighter',
-    accent: 'Futures Together',
-    text: 'Join hands with 110+ members making a measurable difference every single day.',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=1400&q=80',
-    eyebrow: 'JOIN THE MOVEMENT',
-    title: 'Serve. Connect.',
-    accent: 'Inspire Change',
-    text: 'Fellowship and impact go hand in hand at the Rotary Club of Thane Hills.',
-  },
-]
-
+// Hero: banner slider (images only) on the left, advertisement card on the right.
 export default function Hero() {
   const [idx, setIdx] = useState(0)
-  const slide = slides[idx]
-  const go = (d) => setIdx((i) => (i + d + slides.length) % slides.length)
+  const count = banners.length
+  const go = (d) => setIdx((i) => (i + d + count) % count)
+
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % count), 5000)
+    return () => clearInterval(t)
+  }, [count])
 
   return (
     <section className="relative isolate -mt-20 overflow-hidden pt-24 pb-2">
@@ -39,46 +22,23 @@ export default function Hero() {
         aria-hidden="true"
         className="absolute inset-0 -z-10 h-full w-full object-cover"
       />
-      {/* overlay: keep the top clear so the banner shows behind the floating pill,
-          then fade to light so the carousel + ad card stay highlighted */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-navy/30 via-white/70 to-canvas/90" />
 
       <div className="container-x relative grid gap-5 lg:grid-cols-[1.85fr_1fr]">
-        {/* Left: hero carousel */}
-        <div className="relative h-[460px] overflow-hidden rounded-xl shadow-card md:h-[560px]">
-          {slides.map((s, i) => (
+        {/* Left: banner slider — images only */}
+        <div className="relative h-[460px] overflow-hidden rounded-xl bg-navy-deep shadow-card md:h-[560px]">
+          {banners.map((src, i) => (
             <img
               key={i}
-              src={s.img}
-              alt=""
+              src={src}
+              alt={`Rotary Club of Thane Hills banner ${i + 1}`}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              referrerPolicy="no-referrer"
               className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
                 i === idx ? 'opacity-100' : 'opacity-0'
               }`}
             />
           ))}
-          <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/95 via-navy/70 to-transparent" />
-
-          <div
-            key={idx}
-            className="hero-slide-in relative z-10 flex h-full max-w-lg flex-col justify-center px-8 md:px-12"
-          >
-            <span className="mb-2 text-[11px] font-bold uppercase tracking-[0.25em] text-gold">
-              {slide.eyebrow}
-            </span>
-            <h1 className="font-heading text-[2rem] font-extrabold leading-[1.1] text-white md:text-[2.75rem]">
-              {slide.title}
-              <span className="mt-1 block font-script text-[2rem] font-bold text-gold md:text-[2.75rem]">
-                {slide.accent}
-              </span>
-            </h1>
-            <p className="mt-4 max-w-md text-sm text-white/85 md:text-[15px]">{slide.text}</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a href="#" className="btn-gold">
-                DISCOVER OUR PROJECTS <ArrowRight className="h-4 w-4" />
-              </a>
-              <a href="#" className="btn-outline-white">JOIN OUR MISSION</a>
-            </div>
-          </div>
 
           {/* arrows at edges */}
           <button
@@ -98,7 +58,7 @@ export default function Hero() {
 
           {/* dots centered */}
           <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 gap-2">
-            {slides.map((_, i) => (
+            {banners.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setIdx(i)}
@@ -111,11 +71,17 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right: advertisement card */}
-        <a href="#" className="block overflow-hidden rounded-xl shadow-card">
+        {/* Right: advertisement card (real ad → thanelitfest.in) */}
+        <a
+          href={advertisement.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block h-[460px] overflow-hidden rounded-xl shadow-card md:h-[560px]"
+        >
           <img
-            src="https://www.bestclubsupplies.com/images/RZ26BAN2.jpg"
+            src={advertisement.img}
             alt="Advertisement"
+            referrerPolicy="no-referrer"
             className="h-full w-full object-cover"
           />
         </a>

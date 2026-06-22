@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import Reveal from './Reveal'
 import SplitText from './SplitText'
+import SpotlightCard from './SpotlightCard'
 
 const projects = [
   {
@@ -43,7 +44,7 @@ export default function FeaturedProjects() {
           as="a"
           variant="right"
           href="#"
-          className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-gold-cta transition-all hover:gap-2"
+          className="link-underline text-[11px] font-bold uppercase tracking-wide text-gold-cta"
         >
           View All Projects <ArrowRight className="h-3.5 w-3.5" />
         </Reveal>
@@ -52,20 +53,16 @@ export default function FeaturedProjects() {
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {projects.map((p, i) => (
           <Reveal as="article" key={p.title} variant="up" delay={i * 110} className="h-full">
-            <div className="group flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-card transition-all hover:-translate-y-1.5 hover:shadow-cardHover">
-              <div className="h-40 overflow-hidden">
-                <img
-                  src={p.img}
-                  alt={p.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
+            <SpotlightCard className="group flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-card transition-all hover:-translate-y-1.5 hover:shadow-cardHover">
+              <div className="img-zoom h-40">
+                <img src={p.img} alt={p.title} className="h-full w-full object-cover" />
               </div>
               <div className="flex flex-1 flex-col p-4">
                 <h4 className="font-heading text-[15px] font-bold leading-snug text-navy">{p.title}</h4>
                 <p className="mt-1.5 text-xs leading-relaxed text-muted">{p.desc}</p>
                 <p className="mt-auto pt-3 text-sm font-extrabold text-gold-cta">{p.stat}</p>
               </div>
-            </div>
+            </SpotlightCard>
           </Reveal>
         ))}
       </div>

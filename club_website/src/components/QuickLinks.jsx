@@ -1,5 +1,6 @@
 import { Calendar, CalendarCheck, Mail, HandHeart, ArrowRight } from 'lucide-react'
 import Reveal from './Reveal'
+import SpotlightCard from './SpotlightCard'
 
 const cards = [
   {
@@ -42,7 +43,7 @@ export default function QuickLinks() {
       <div className="container-x grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map(({ Icon, color, tint, title, desc, cta }, i) => (
           <Reveal key={title} variant="up" delay={i * 110} className="h-full">
-            <div
+            <SpotlightCard
               className={`group h-full rounded-xl bg-gradient-to-br ${tint} to-white p-6 shadow-card ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-cardHover`}
             >
               <div className="mb-3 flex items-center gap-3">
@@ -60,7 +61,7 @@ export default function QuickLinks() {
               >
                 {cta} <ArrowRight className="h-3.5 w-3.5" />
               </a>
-            </div>
+            </SpotlightCard>
           </Reveal>
         ))}
       </div>
