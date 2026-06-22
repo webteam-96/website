@@ -18,3 +18,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local design references / scratch screenshots (not part of the app).
+# Note: the tracked `crops/` folder is kept; only the scratch `_crops/` is ignored.
+_crops/
+ChatGPT Image*.png
+clubfinder.png
+district comittee.png
