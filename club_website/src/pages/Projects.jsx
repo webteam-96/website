@@ -3,13 +3,16 @@ import { Search, X, HeartHandshake, ArrowRight, FolderOpen } from 'lucide-react'
 import Breadcrumb from '../components/Breadcrumb'
 import Reveal from '../components/Reveal'
 import SpotlightCard from '../components/SpotlightCard'
-import { projects, projectAvenues, projectsByAvenue, avenueOf } from '../data/projects'
+import { projects as staticProjects, projectAvenues, avenueOf } from '../data/projects'
+import { useApiData } from '../hooks/useApiData'
+import { useClub } from '../contexts/ClubData'
+import { getProjects } from '../lib/clubApi'
+import { adaptProjects } from '../lib/adapters'
 
 // "Club Events" (CE) duplicates the dedicated Meetings page, and "Club Service"
 // (CS) is excluded by request — both are hidden from the Projects page (tabs +
 // the "All" list).
 const HIDDEN_AVENUES = ['CE', 'CS']
-const visibleProjects = projects.filter((p) => !HIDDEN_AVENUES.includes(p.avenue))
 const visibleAvenues = projectAvenues.filter((a) => !HIDDEN_AVENUES.includes(a.code))
 
 function ProjectCard({ p, i }) {
@@ -61,8 +64,17 @@ function ProjectCard({ p, i }) {
 export default function Projects({ avenue = null }) {
   const [active, setActive] = useState(avenue)
   const [query, setQuery] = useState('')
+  const { selectedYearId } = useClub()
 
-  const base = active ? projectsByAvenue(active) : visibleProjects
+  const { data: allProjects } = useApiData(
+    () => getProjects(selectedYearId).then(adaptProjects),
+    [selectedYearId],
+    staticProjects,
+  )
+  const visibleProjects = allProjects.filter((p) => !HIDDEN_AVENUES.includes(p.avenue))
+  const byAvenue = (code) => allProjects.filter((p) => p.avenue === code)
+
+  const base = active ? byAvenue(active) : visibleProjects
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return base
@@ -106,7 +118,7 @@ export default function Projects({ avenue = null }) {
               All ({visibleProjects.length})
             </button>
             {visibleAvenues.map((a) => {
-              const count = projectsByAvenue(a.code).length
+              const count = byAvenue(a.code).length
               return (
                 <button
                   key={a.code}

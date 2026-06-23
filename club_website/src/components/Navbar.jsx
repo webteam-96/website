@@ -1,25 +1,26 @@
 import { useEffect, useState } from 'react'
 import { Menu, X, ChevronDown, CalendarRange, LogIn } from 'lucide-react'
 import Logo from './Logo'
-import { projectAvenues, projectYears, currentYear } from '../data/projects'
+import { projectAvenues } from '../data/projects'
+import { useClub } from '../contexts/ClubData'
 
 const fmtYear = (y) => y.replace(/^(\d{4})-\d{2}(\d{2})$/, '$1-$2')
 
 // Compact Rotary-year selector shown in the header.
 function YearSelect({ className = '' }) {
-  const [year, setYear] = useState(currentYear)
+  const { years, selectedYearLabel, selectYear } = useClub()
   return (
     <div className={`relative ${className}`}>
       <CalendarRange className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gold" />
       <select
-        value={year}
-        onChange={(e) => setYear(e.target.value)}
+        value={selectedYearLabel}
+        onChange={(e) => selectYear(e.target.value)}
         aria-label="Select Rotary year"
         className="h-10 cursor-pointer appearance-none rounded-full border border-navy/20 bg-white pl-9 pr-9 text-sm font-bold text-navy shadow-sm transition-colors hover:border-navy/40 focus:border-gold/60 focus:outline-none focus:ring-2 focus:ring-gold/20"
       >
-        {projectYears.map((y) => (
-          <option key={y} value={y}>
-            {fmtYear(y)}
+        {years.map((y) => (
+          <option key={y.yearLabel} value={y.yearLabel}>
+            {fmtYear(y.yearLabel)}
           </option>
         ))}
       </select>

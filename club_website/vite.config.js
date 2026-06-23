@@ -27,5 +27,17 @@ export default defineConfig({
       // exclude them from watching entirely.
       ignored: ['**/*.png'],
     },
+    // Dev proxy → the Rotary public API. The API has no CORS headers, so the
+    // browser can't call it directly; the dev server proxies same-origin
+    // requests at /club-api/* to https://rizones45678.org/API/api/*.
+    // (Production uses the matching Vercel rewrite — see vercel.json.)
+    proxy: {
+      '/club-api': {
+        target: 'https://rizones45678.org/API/api',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (p) => p.replace(/^\/club-api/, ''),
+      },
+    },
   },
 })

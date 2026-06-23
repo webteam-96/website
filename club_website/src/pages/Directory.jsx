@@ -7,7 +7,10 @@ import Breadcrumb from '../components/Breadcrumb'
 import Avatar from '../components/Avatar'
 import Reveal from '../components/Reveal'
 import SpotlightCard from '../components/SpotlightCard'
-import { members } from '../data/directory'
+import { members as staticMembers } from '../data/directory'
+import { useApiData } from '../contexts/ClubData'
+import { getDirectory } from '../lib/clubApi'
+import { adaptDirectory } from '../lib/adapters'
 
 const PAGE_SIZE = 16
 const CROWN_TINTS = [
@@ -91,13 +94,20 @@ export default function Directory() {
   const [view, setView] = useState('grid') // 'grid' | 'list'
   const [page, setPage] = useState(1)
 
+  // Live member directory from the API, falling back to the bundled snapshot.
+  const { data: members } = useApiData(
+    () => getDirectory().then(adaptDirectory),
+    [],
+    staticMembers,
+  )
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return members
     return members.filter(
       (m) => m.name.toLowerCase().includes(q) || (m.work || '').toLowerCase().includes(q),
     )
-  }, [query])
+  }, [query, members])
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const safePage = Math.min(page, pageCount)
