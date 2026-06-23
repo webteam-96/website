@@ -6,7 +6,7 @@
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/club_website", "destination": "/club_website/index.html" },
-    { "source": "/club_website/:path*", "destination": "/club_website/index.html" },
+    { "source": "/club_website/", "destination": "/club_website/index.html" },
     { "source": "/district_website/:path*", "destination": "/district_website/index.html" }
   ]
 }
