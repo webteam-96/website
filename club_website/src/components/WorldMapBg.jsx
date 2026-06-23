@@ -1,9 +1,14 @@
+import { asset } from '../lib/asset'
+
 // Decorative dotted-world-map background. The SVG (CC0, public domain) is used
 // as a CSS mask so the dots can be tinted any colour via `color`, kept subtle
 // with `opacity`. Purely decorative — pointer-events-none, aria-hidden.
+// The mask URL goes through asset() so it resolves under the deploy base
+// (e.g. /club_website/) on Vercel as well as locally.
+const MAP_URL = asset('/images/bg/world-dotted.svg')
 const MASK = {
-  WebkitMaskImage: 'url(/images/bg/world-dotted.svg)',
-  maskImage: 'url(/images/bg/world-dotted.svg)',
+  WebkitMaskImage: `url(${MAP_URL})`,
+  maskImage: `url(${MAP_URL})`,
   WebkitMaskRepeat: 'no-repeat',
   maskRepeat: 'no-repeat',
   WebkitMaskPosition: 'center',
