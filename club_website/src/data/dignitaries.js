@@ -1,5 +1,7 @@
 // "Dignitaries of Rotary" profiles — mirrors the live site's diginitary.aspx
 // pages reached from the home-page "Know More" / View Profile links.
+import { asset } from '../lib/asset'
+
 export const dignitaries = [
   {
     id: 'ri-president',
@@ -53,5 +55,8 @@ export const dignitaries = [
     phone: '9820063775',
   },
 ]
+
+// Prefix local dignitary photos with the deploy base (Vercel sub-path).
+dignitaries.forEach((d) => { if (d.img) d.img = asset(d.img) })
 
 export const getDignitary = (id) => dignitaries.find((d) => d.id === id)

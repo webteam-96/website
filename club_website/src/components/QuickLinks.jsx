@@ -1,6 +1,7 @@
 import { Calendar, CalendarDays, Newspaper, HeartHandshake, ArrowRight } from 'lucide-react'
 import Reveal from './Reveal'
 import SpotlightCard from './SpotlightCard'
+import { asset } from '../lib/asset'
 
 // Brand-forward "Rotary crest" cards — a strict navy + gold identity. Each card
 // carries a navy header band with an inlaid gold-ringed icon medallion and the
@@ -65,7 +66,7 @@ export default function QuickLinks() {
               <div className="relative overflow-hidden bg-gradient-to-br from-navy to-navy-deep px-6 pb-9 pt-6">
                 {/* the real Rotary wheel, slowly turning behind the medallion */}
                 <img
-                  src="/images/logo/wheel.png"
+                  src={asset('/images/logo/wheel.png')}
                   alt=""
                   aria-hidden="true"
                   className="wheel-spin pointer-events-none absolute -right-7 -top-8 h-28 w-28 opacity-[0.14] transition-opacity duration-500 group-hover:opacity-30"

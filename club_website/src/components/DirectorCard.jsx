@@ -1,6 +1,7 @@
 import { User } from 'lucide-react'
 import { GearMark } from './Logo'
 import SpotlightCard from './SpotlightCard'
+import { asset } from '../lib/asset'
 
 // Horizontal director card: navy photo panel on the left, a white content
 // panel on the right separated by a gold-traced wave (S-curve) seam.
@@ -20,7 +21,7 @@ export default function DirectorCard({ name, role, img }) {
       {/* portrait photo, or initials when the club has no photo */}
       {img ? (
         <img
-          src={img}
+          src={asset(img)}
           alt={name}
           loading="lazy"
           className="absolute inset-y-0 left-0 h-full w-1/2 object-cover object-top"

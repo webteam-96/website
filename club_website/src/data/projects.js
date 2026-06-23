@@ -5,6 +5,8 @@
 // man-hours, Rotary Area of Focus) plus the project's full photo gallery.
 // ─────────────────────────────────────────────────────────────────────────
 
+import { asset } from '../lib/asset'
+
 export const ROTARY_YEAR = "2025-26"
 export const projectYears = ["2026-2027","2025-2026","2024-2025","2023-2024","2022-2023","2021-2022","2020-2021","2019-2020","2018-2019","2017-2018"]
 export const currentYear = "2025-2026"
@@ -2133,6 +2135,12 @@ export const projects = [
     ]
   }
 ]
+
+// Prefix local image + gallery paths with the deploy base (Vercel sub-path).
+projects.forEach((p) => {
+  if (p.img) p.img = asset(p.img)
+  if (Array.isArray(p.gallery)) p.gallery = p.gallery.map(asset)
+})
 
 export const projectsByAvenue = (code) => projects.filter((p) => p.avenue === code)
 export const getProject = (id) => projects.find((p) => p.id === String(id))

@@ -2,6 +2,7 @@ import Breadcrumb from '../components/Breadcrumb'
 import Reveal from '../components/Reveal'
 import SplitText from '../components/SplitText'
 import TiltedCard from '../components/TiltedCard'
+import { asset } from '../lib/asset'
 
 function SectionHeading({ children }) {
   return (
@@ -55,7 +56,7 @@ export default function About() {
             {/* Rotary logo card */}
             <TiltedCard className="flex items-center justify-center rounded-xl bg-[#FBF6EC] p-10">
               <img
-                src="/images/logo/rcth-wordmark.png"
+                src={asset('/images/logo/rcth-wordmark.png')}
                 alt="Rotary Club of Thane Hills"
                 className="w-full max-w-[260px]"
               />

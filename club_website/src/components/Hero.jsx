@@ -34,7 +34,7 @@ export default function Hero() {
       {/* soft warm glow up top */}
       <div className="pointer-events-none absolute left-1/2 top-6 -z-10 h-64 w-[55%] -translate-x-1/2 rounded-full bg-gold/10 blur-3xl" />
 
-      <div className="container-x relative grid items-start gap-5 lg:grid-cols-[1.85fr_1fr]">
+      <div className="container-x relative grid items-start gap-5 lg:grid-cols-[1.91fr_1fr]">
         {/* Left: banner slider — images only (card matches the 996×596 artwork
             so the full banner shows with no crop and no background bars) */}
         <div className="relative aspect-[996/596] overflow-hidden rounded-xl bg-navy-deep shadow-card">

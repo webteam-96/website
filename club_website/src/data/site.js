@@ -4,6 +4,8 @@
 // records can be reused across Projects, Meetings, Newsletter, About, etc.
 // ─────────────────────────────────────────────────────────────────────────
 
+import { asset } from '../lib/asset'
+
 export const meetingInfo = {
   venue: 'Smt. Savitridevi Thirani High School, Road No. 1, Vartak Nagar, Thane West, 400606, Maharashtra, India',
   day: 'Thursday',
@@ -186,3 +188,9 @@ export const clubProjects = [
   ...tag(internationalProjects, 'International Service'),
   ...tag(publicImageProjects, 'Public Image'),
 ]
+
+// Resolve local asset paths against the deploy base so images load both in dev
+// ("/") and under the production sub-path ("/club_website/" on Vercel).
+banners.forEach((b, i) => { banners[i] = asset(b) })
+advertisements.forEach((a) => { a.img = asset(a.img) })
+newsletters.forEach((n) => { n.url = asset(n.url) })

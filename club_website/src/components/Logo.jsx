@@ -1,8 +1,10 @@
+import { asset } from '../lib/asset'
+
 // Rotary wheel mark — official wheel PNG.
 export function GearMark({ className = 'h-9 w-9' }) {
   return (
     <img
-      src="/images/logo/wheel.png"
+      src={asset('/images/logo/wheel.png')}
       alt=""
       aria-hidden="true"
       className={`object-contain ${className}`}
@@ -16,7 +18,7 @@ export default function Logo() {
   return (
     <a href="#/" className="flex items-center" aria-label="Rotary Club of Thane Hills — Home">
       <img
-        src="/images/logo/rcth-wordmark.png"
+        src={asset('/images/logo/rcth-wordmark.png')}
         alt="Rotary Club of Thane Hills"
         className="h-9 w-auto md:h-10"
       />

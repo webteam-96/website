@@ -1,5 +1,6 @@
 import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
 import { GearMark } from './Logo'
+import { asset } from '../lib/asset'
 
 const quickLinks = [
   { label: 'Home', href: '#/' },
@@ -38,7 +39,7 @@ export default function Footer() {
     <footer className="relative isolate overflow-hidden bg-navy-deep text-white">
       {/* background image — hands holding a heart (community / service) */}
       <img
-        src="/images/stock/footer-heart.jpg"
+        src={asset('/images/stock/footer-heart.jpg')}
         alt=""
         aria-hidden="true"
         className="absolute inset-0 -z-20 h-full w-full object-cover opacity-60"
@@ -54,7 +55,7 @@ export default function Footer() {
         <div className="lg:col-span-1">
           <a href="#/" className="inline-flex rounded-xl bg-white p-3 shadow-md" aria-label="Rotary Club of Thane Hills — Home">
             <img
-              src="/images/logo/rcth-wordmark.png"
+              src={asset('/images/logo/rcth-wordmark.png')}
               alt="Rotary Club of Thane Hills"
               className="h-11 w-auto"
             />
