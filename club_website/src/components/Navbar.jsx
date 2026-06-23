@@ -42,7 +42,7 @@ const links = [
     children: [
       { label: 'All Projects', href: '#/projects' },
       ...projectAvenues
-        .filter((a) => a.code !== 'CE')
+        .filter((a) => a.code !== 'CE' && a.code !== 'CS')
         .map((a) => ({ label: a.label, href: `#/projects/${a.code}` })),
     ],
   },

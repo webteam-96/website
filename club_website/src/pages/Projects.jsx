@@ -5,10 +5,12 @@ import Reveal from '../components/Reveal'
 import SpotlightCard from '../components/SpotlightCard'
 import { projects, projectAvenues, projectsByAvenue, avenueOf } from '../data/projects'
 
-// "Club Events" (CE) is the same content as the dedicated Meetings page, so it's
-// excluded from the Projects page (tabs + the "All" list) to avoid duplicates.
-const visibleProjects = projects.filter((p) => p.avenue !== 'CE')
-const visibleAvenues = projectAvenues.filter((a) => a.code !== 'CE')
+// "Club Events" (CE) duplicates the dedicated Meetings page, and "Club Service"
+// (CS) is excluded by request — both are hidden from the Projects page (tabs +
+// the "All" list).
+const HIDDEN_AVENUES = ['CE', 'CS']
+const visibleProjects = projects.filter((p) => !HIDDEN_AVENUES.includes(p.avenue))
+const visibleAvenues = projectAvenues.filter((a) => !HIDDEN_AVENUES.includes(a.code))
 
 function ProjectCard({ p, i }) {
   const av = avenueOf(p.avenue)
