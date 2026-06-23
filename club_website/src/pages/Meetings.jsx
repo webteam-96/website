@@ -74,9 +74,9 @@ export default function Meetings() {
     <>
       <Breadcrumb
         eyebrow="Fellowship & Programs"
-        title="Meetings"
+        title="Club Services"
         titleClassName="uppercase tracking-wide"
-        trail={[{ label: 'Home', href: '#/' }, { label: 'Meetings' }]}
+        trail={[{ label: 'Home', href: '#/' }, { label: 'Club Services' }]}
       />
 
       <div className="bg-canvas">
