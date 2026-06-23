@@ -1,8 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 
-// Splits a heading into per-character spans that stagger in when the element
-// enters the viewport (re-triggers every pass). Each letter is also interactive
-// on hover. Words are kept intact so text still wraps naturally.
+// Splits a heading into per-character spans that stagger in (once) when the
+// element scrolls into view, powered by Framer Motion. Letters animate with
+// transform + opacity only (no blur) for smooth motion, and lift on hover.
+const EASE = [0.22, 1, 0.36, 1]
+
+const charVariants = {
+  hidden: { opacity: 0, y: 14 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+}
+
 export default function SplitText({
   text,
   as: Tag = 'span',
@@ -11,48 +18,50 @@ export default function SplitText({
   threshold = 0.2,
   ...rest
 }) {
-  const ref = useRef(null)
-  const [shown, setShown] = useState(false)
+  const reduce = useReducedMotion()
 
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => setShown(entry.isIntersecting),
-      { threshold },
+  if (reduce) {
+    const Plain = Tag
+    return (
+      <Plain className={className} {...rest}>
+        {text}
+      </Plain>
     )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [threshold])
+  }
 
+  const MotionTag = motion[Tag] || motion.span
   const words = String(text).split(' ')
 
+  const container = {
+    hidden: {},
+    show: { transition: { staggerChildren: charDelay / 1000, delayChildren: 0.05 } },
+  }
+
   return (
-    <Tag
-      ref={ref}
+    <MotionTag
       aria-label={text}
-      className={`split ${shown ? 'is-visible' : ''} ${className}`}
+      className={className}
+      variants={container}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: threshold }}
       {...rest}
     >
       {words.map((word, w) => (
         <span key={w} className="split-word" aria-hidden="true">
-          {[...word].map((ch, c) => {
-            // word leads the cascade; letters trail it; clamp so long
-            // headings never drag (max ~520ms before the last glyph starts)
-            const delay = shown ? Math.min(w * 90 + c * charDelay, 520) : 0
-            return (
-              <span
-                key={c}
-                className="split-char"
-                style={{ transitionDelay: `${delay}ms` }}
-              >
-                {ch}
-              </span>
-            )
-          })}
+          {[...word].map((ch, c) => (
+            <motion.span
+              key={c}
+              className="inline-block"
+              variants={charVariants}
+              whileHover={{ y: -6, scale: 1.15, color: '#f7a600', transition: { duration: 0.2, ease: EASE } }}
+            >
+              {ch}
+            </motion.span>
+          ))}
           {w < words.length - 1 && <span className="split-space"> </span>}
         </span>
       ))}
-    </Tag>
+    </MotionTag>
   )
 }

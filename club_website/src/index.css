@@ -150,6 +150,21 @@
   mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
 }
 
+/* ── Distinct, subtle section backdrops (used on alternating sections) ── */
+/* faint navy dot-grid — for light sections (e.g. Dignitaries) */
+.bg-dotgrid {
+  background-image: radial-gradient(rgba(10, 36, 114, 0.07) 1.3px, transparent 1.3px);
+  background-size: 26px 26px;
+  background-position: -13px -13px;
+}
+/* soft gold + navy colour mesh — for light sections (e.g. Featured Projects) */
+.bg-mesh {
+  background-image:
+    radial-gradient(42% 55% at 10% 15%, rgba(247, 166, 0, 0.1), transparent 70%),
+    radial-gradient(45% 55% at 90% 8%, rgba(10, 36, 114, 0.07), transparent 70%),
+    radial-gradient(55% 60% at 80% 95%, rgba(247, 166, 0, 0.07), transparent 70%);
+}
+
 /* Sweeping sheen for the CTA button */
 .shine {
   position: relative;
@@ -180,11 +195,9 @@
 .reveal {
   opacity: 0;
   transform: translateY(28px) scale(0.985);
-  filter: blur(8px);
-  transition: opacity var(--dur-fast) var(--ease-emphasized),
-    transform var(--dur-slow) var(--ease-emphasized),
-    filter var(--dur-base) ease;
-  will-change: opacity, transform, filter;
+  transition: opacity var(--dur-base) var(--ease-emphasized),
+    transform var(--dur-base) var(--ease-emphasized);
+  will-change: transform;
 }
 /* snappier easing while hidden / leaving */
 .reveal:not(.is-visible) {
@@ -211,7 +224,6 @@
 .reveal.is-visible {
   opacity: 1;
   transform: none;
-  filter: blur(0);
 }
 /* the CTA gets an extra scale "pop" as it lands */
 .reveal-pop {
@@ -570,6 +582,55 @@
   }
 }
 
+/* ── Slowly rotating rotary wheel ─────────────────────────────────── */
+.wheel-spin {
+  animation: wheel-spin 26s linear infinite;
+}
+@keyframes wheel-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wheel-spin {
+    animation: none;
+  }
+}
+
+/* ── React Bits "Glare Hover": a diagonal sheen sweeps across on hover ── */
+.glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 30;
+}
+.glare::before {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -90%;
+  width: 55%;
+  height: 220%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-22deg);
+  transition: left 0.85s ease;
+}
+.group:hover .glare::before {
+  left: 150%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .glare::before {
+    transition: none;
+  }
+}
+
 /* ── Aurora: drifting blurred colour bands behind a dark hero ─────── */
 .aurora {
   position: absolute;
@@ -718,5 +779,36 @@
   }
   .group:hover .img-zoom::after {
     opacity: 0 !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Dignitaries & Leaders — premium-gold card accents
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Rotating conic-gold halo around the circular avatar (reuses @keyframes
+   star-spin). Calm at rest, speeds up on hover like a turning Rotary wheel. */
+.avatar-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  z-index: -1;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 60%,
+    var(--brand-gold) 78%,
+    #fff 88%,
+    transparent 100%
+  );
+  animation: star-spin 9s linear infinite;
+}
+.group:hover .avatar-ring::before {
+  animation-duration: 3.5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-ring::before {
+    animation: none !important;
   }
 }

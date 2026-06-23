@@ -3,46 +3,64 @@ import { Search, UserSearch } from 'lucide-react'
 import Breadcrumb from '../components/Breadcrumb'
 import DirectorCard from '../components/DirectorCard'
 
+// Board of Directors 2025-26, crawled from the club's official site
+// (rcthanehills.rotaryindia.org → Directors.aspx?year=2025-2026), including the
+// members' real photos.
 const directors = [
   {
     name: 'Samir Limaye',
     role: 'Club President',
-    img: 'https://rizones45678.org/API/Documents/directory/SAMIR_LIMAY28092016111836PM.png',
+    img: '/images/directory/SAMIR_LIMAY28092016111836PM.png',
   },
   {
     name: 'Nilesh Pitale',
     role: 'Club Secretary',
-    img: 'https://rizones45678.org/API/Documents/directory/ContactPhotoRetouching-IMG_20240421_09351021042024094123AM.jpg',
+    img: '/images/directory/ContactPhotoRetouching-IMG_20240421_09351021042024094123AM.jpg',
+  },
+  {
+    name: 'Vijay Shetty',
+    role: 'Club Learning Facilitator',
+    img: null,
   },
   {
     name: 'Jayram Nagesh Mendon',
     role: 'Club Vice President',
-    img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80',
+    img: '/images/directory/20102021041355PM.png',
   },
   {
     name: 'Vasant Bhat',
     role: 'Club Treasurer',
-    img: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=400&q=80',
+    img: '/images/directory/20082023092950PM.png',
   },
   {
     name: 'Anindya Dasgupta',
     role: 'Club Foundation Chair',
-    img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
+    img: '/images/directory/anindya09072023051823PM.jpg',
   },
   {
     name: 'Suhas Venkatesh Kulkarni',
     role: 'Club Membership Chair',
-    img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80',
+    img: '/images/directory/DR._SUHAS_KULKARNI30072015081843PM.png',
+  },
+  {
+    name: 'Aniket Kanade',
+    role: 'Club Public Image Chair',
+    img: null,
   },
   {
     name: 'Pawan Adnani',
     role: 'Club Service Projects Chair',
-    img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
+    img: '/images/directory/25022018040837PM.png',
   },
   {
     name: 'Narendra Rao',
     role: 'Club Executive Secretary / Director',
-    img: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=400&q=80',
+    img: '/images/directory/IMG_9282_(1)19042025041753PM.jpeg',
+  },
+  {
+    name: 'Deeba Khan',
+    role: 'Director - Youth Service',
+    img: '/images/directory/9B131129-A741-4433-8E5A-FBFEAD88222819122024111731PM.jpeg',
   },
 ]
 
@@ -70,7 +88,7 @@ export default function Directors() {
           {/* search bar */}
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="mx-auto mb-10 flex max-w-3xl items-center gap-3"
+            className="mx-auto mb-10 flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center"
           >
             <div className="flex flex-1 items-center gap-3 rounded-full border border-gray-200 bg-white px-5 py-3 shadow-sm focus-within:border-gold/60 focus-within:ring-2 focus-within:ring-gold/20">
               <Search className="h-5 w-5 shrink-0 text-navy" />
@@ -84,7 +102,7 @@ export default function Directors() {
             </div>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3 text-sm font-bold text-navy shadow-sm transition-all hover:bg-gold-light hover:shadow-md"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold px-7 py-3 text-sm font-bold text-navy shadow-sm transition-all hover:bg-gold-light hover:shadow-md sm:w-auto"
             >
               <UserSearch className="h-4 w-4" />
               Search

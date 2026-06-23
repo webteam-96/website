@@ -1,152 +1,114 @@
 import { useMemo, useState } from 'react'
-import { Search, Users, X } from 'lucide-react'
+import {
+  Search, Users, X, Crown, LayoutGrid, List,
+  ChevronLeft, ChevronRight, Briefcase,
+} from 'lucide-react'
 import Breadcrumb from '../components/Breadcrumb'
 import Avatar from '../components/Avatar'
 import Reveal from '../components/Reveal'
 import SpotlightCard from '../components/SpotlightCard'
+import { members } from '../data/directory'
 
-// Full member roster — pulled from the club's official directory
-// (rcthanehills.rotaryindia.org). Each entry is a member's name and their
-// vocational classification (profession / business).
-const members = [
-  { name: 'A.S. Shankarnarayan', work: '' },
-  { name: 'Aanchal Joshi', work: '' },
-  { name: 'Adivarahan Subramanian', work: 'Development Consulting' },
-  { name: 'Ajit Gujar', work: 'Rubber Print Block Manufacturing' },
-  { name: 'Akanksha Ghotkar', work: 'Branding and Marketing' },
-  { name: 'Alpa Dinesh Shah', work: 'Tarot Card Reading, Astrology, Occult Sciences, Aura Healings' },
-  { name: 'Amit Choudhury', work: 'Realty Advisors' },
-  { name: 'Aniket Kanade', work: 'IT DevOps Engineering' },
-  { name: 'Anil Joshi', work: 'Construction Material Supply' },
-  { name: 'Anil Kumar Km', work: 'Manufacturing Packaging Machines' },
-  { name: 'Anil M. Shinde', work: 'Press & Studio Photography' },
-  { name: 'Anindya Dasgupta', work: 'Packaging Machines - Marketing' },
-  { name: 'Anup Surve', work: 'Engineering Exports' },
-  { name: 'Anuradha Sukhathankar', work: 'Fitness Coach' },
-  { name: 'Asawari Anand Palwankar', work: 'HR Consulting' },
-  { name: 'Ashes Ganguly', work: 'Analytical Instr. Mktg.' },
-  { name: 'Ashok Mulkraj Mahajan', work: 'Microswitch Mfg.' },
-  { name: 'Ashutosh Agarwal', work: 'Consulting - Finance' },
-  { name: 'Atul Bhide', work: 'Audio Book Publishing' },
-  { name: 'Aubrey Rebello', work: '' },
-  { name: 'Bhawana Jadhav', work: 'Professional' },
-  { name: 'Bijay Yadav', work: '' },
-  { name: 'Ca Mahesh Madkholkar', work: 'Chartered Accountant' },
-  { name: 'Ca Sukhen Ravindranath Kundu', work: 'Chartered Accountant' },
-  { name: 'Dayal Dodeja', work: 'Packaging Products Mfg.' },
-  { name: 'Deeba Khan', work: 'Doctor - Physiotherapist, Senior Care home' },
-  { name: 'Dr Mansi Baviskar', work: 'Doctor - Paediatric Dentistry' },
-  { name: 'Dr Radhika Santosh Bhondve', work: 'Doctor - Medicine' },
-  { name: 'Dr. Abhay Purushottam Kulkarni', work: 'Doctor - Orthopaedic Surgeon' },
-  { name: 'Dr. Amit Vijay Karkhanis', work: 'Doctor' },
-  { name: 'Dr. Anagha Amit Karkhanis', work: 'Gynaecologist' },
-  { name: 'Dr. Atul Gupte', work: 'Doctor - General Medicine' },
-  { name: 'Dr. Geeta Vaidya', work: 'Doctor - Gynecologist' },
-  { name: 'Dr. Raju Subramanian', work: 'Doctor - Pulmonology' },
-  { name: 'Dr. Swaroop Kulkarni', work: 'Doctor - Pathology' },
-  { name: 'Dr. Vijay Shamrao Kulkarni', work: 'Doctor - Internal Medicine' },
-  { name: 'Dr. Yusuf Virani', work: 'Doctor - Opthalmic Surgery' },
-  { name: 'Gargi Mitra', work: '' },
-  { name: 'Gautam Kumar Banik', work: 'Software Professional' },
-  { name: 'Govind Khetan', work: 'Technologist' },
-  { name: 'Harshad Avinash Divekar', work: 'Marketing - Switchgear' },
-  { name: 'Hemant Kulkarni', work: 'Teaching - Microbiology' },
-  { name: 'Jayant Padmakar Nagavkar', work: 'Leadership & Change Management' },
-  { name: 'Jayram Nagesh Mendon', work: 'IT Automation' },
-  { name: 'John Koshy', work: 'Electronics Goods Mfg.' },
-  { name: 'K. R. Suresh', work: 'Facade Consultancy' },
-  { name: 'K. S. Rangnathan', work: 'Printing & Packaging' },
-  { name: 'Kailash Srichand Golani', work: 'Clean Room Equipment & Precision Fabrication' },
-  { name: 'Kalita Moraes Subramanian', work: 'Financial Advisory' },
-  { name: 'Kamal Agrawal', work: 'Financial Marketing' },
-  { name: 'Kapil Barve', work: 'Shipping Operations' },
-  { name: 'Kunal Varma', work: 'Precious Stones & Diamond Trading' },
-  { name: 'Madhukar Abaji Chavan', work: 'Financial Auditing' },
-  { name: 'Madhumita Rajeev Ghosh', work: 'Digital Transformation Consulting' },
-  { name: 'Mahesh Varma', work: 'Diamond Trading' },
-  { name: 'Mandar Bhalerao', work: '' },
-  { name: 'Manisha Shekhar Kulkarni', work: 'Software Developer' },
-  { name: 'Milind Prabhakar Suryawanshi', work: 'Equity Market Consultancy' },
-  { name: 'N. D. Joseph', work: 'Scientific Instrument Indenting' },
-  { name: 'Narendra Rao', work: 'Information Technology Software Development' },
-  { name: 'Nilesh Lad', work: 'Tax & Insurance Consultancy' },
-  { name: 'Nilesh Pitale', work: 'IT Infrastructure & Cyber Security' },
-  { name: 'Nilesh Puranik', work: 'Real Estate Development' },
-  { name: 'Nilesh Vasant Likhite', work: 'Information Systems Audit' },
-  { name: 'Padmanabhan Sundaresan', work: 'Financial Services' },
-  { name: 'Paresh Katvi', work: '' },
-  { name: 'Pawan Adnani', work: 'Stationery Import' },
-  { name: 'Prashant Ojha', work: 'Video Games Production & Marketing' },
-  { name: 'R Sentilkumar Pillai', work: 'Offshore Engineering Project Management' },
-  { name: 'Radhakrishnan Sethuraman', work: '' },
-  { name: 'Rajashree Birla', work: '' },
-  { name: 'Rajeev Tipnis', work: 'Engineering Construction Services' },
-  { name: 'Rajesh B. Salaskar', work: '' },
-  { name: 'Rajesh M. Asnani', work: 'Garment Trading' },
-  { name: 'Ramesh Satoor', work: 'English Language Training' },
-  { name: 'Ranish Jaiswal', work: 'IT Infrastructure Marketing' },
-  { name: 'Ravi Iyer', work: '' },
-  { name: 'Ravjitsingh H. Khurana', work: 'Commercial Vehicle Marketing' },
-  { name: 'Rohit Sharma', work: '' },
-  { name: 'Saket Gadkari', work: 'Program Mgmt. & Procurement' },
-  { name: 'Sameer Ramakant Korde', work: 'Experiential Tourism' },
-  { name: 'Samir Limaye', work: 'Industrial Packaging & Automation' },
-  { name: 'Sandeep Bhatia', work: 'Transaction Management' },
-  { name: 'Sanjay Handa', work: 'Insurance & Investment - Consultancy' },
-  { name: 'Sanjay Namdev Koyande', work: '' },
-  { name: 'Sarita Bahl', work: 'Manufacturing - Board Director' },
-  { name: 'Satish Shetty', work: 'Corporate Gift Consultancy' },
-  { name: 'Satish Vasudeo Rao', work: 'Project Financing' },
-  { name: 'Shahaji Ramchandra Khot', work: '' },
-  { name: 'Shailesh Waman Mulye', work: 'Construction - Roads & Buildings' },
-  { name: 'Shakeel Sheikh', work: 'Revenue Services' },
-  { name: 'Shashikant Revankar', work: 'Gold Jewels Mfg' },
-  { name: 'Sheetal Pachpande', work: '' },
-  { name: 'Shirish Songadkar', work: 'Interior Designing' },
-  { name: 'Shrirang Ganesh Date', work: 'Automobile Financing' },
-  { name: 'Simantini Arun Patil', work: '' },
-  { name: 'Slyvester Jacob Kunder', work: 'Travel & Tourism' },
-  { name: 'Sonali Bijur', work: 'Food Manufacturing' },
-  { name: 'Sonu Rameshchandra Dhakan', work: '' },
-  { name: 'Subramaniam N. Iyer', work: 'Architecture Consultancy' },
-  { name: 'Sucheta Rege', work: 'NGO Management' },
-  { name: 'Sudipa Deshpande', work: 'Teaching' },
-  { name: 'Suhas Venkatesh Kulkarni', work: 'Doctor - Paediatric' },
-  { name: 'Sujit Shridhar Uchil', work: 'Office Automation' },
-  { name: 'Sujit Venkatesh Gawayi', work: 'Water Management Design & Commissioning' },
-  { name: 'Sunanda Ghosh', work: '' },
-  { name: 'Sunanda Wadhawan', work: 'Diabetes Consultant' },
-  { name: 'Sunil Gwalani', work: 'Behavioural Training' },
-  { name: 'Sunil Kishore Sharma', work: '' },
-  { name: 'Swapneel Shastri', work: 'IT and Cyber Security Consulting' },
-  { name: 'Uday Ashok Gadgil', work: 'Doctor - Eye Specialist' },
-  { name: 'Uday Sudhir Pilani', work: 'Venture Capital' },
-  { name: 'Umesh Bagul', work: 'Professional' },
-  { name: 'V. Chandrasekharan', work: 'Speciality Chemicals Marketing' },
-  { name: 'Vaishnavi Harshavardhan Kathaley', work: 'Legal Consultancy' },
-  { name: 'Varsha N. Likhite', work: 'Corporate Tax Consultancy' },
-  { name: 'Vasant Bhat', work: 'Chartered Accountant' },
-  { name: 'Vidya Rohan Pradhan', work: '' },
-  { name: 'Vidyadhar Upendra Naik', work: 'Electronics & Telecommunication Engineering' },
-  { name: 'Vijay Shetty', work: 'Chartered Accountant & Tax Consultant' },
-  { name: 'Vikram Mane', work: 'Sales Networking Consulting & Training' },
-  { name: 'Vinod Shetty', work: 'Electrical - Contracting & Consultancy' },
-  { name: 'Virendra Singh Tomar', work: 'Industrialist' },
-  { name: 'Yamini Kundetkar', work: 'Business Management' },
-  { name: 'Yashpal Mewati', work: 'Facility Management Services' },
-  { name: 'Yashwant Duduskar', work: 'Civil Law - Practice' },
+const PAGE_SIZE = 16
+const CROWN_TINTS = [
+  'bg-amber-100 text-amber-500',
+  'bg-blue-100 text-blue-500',
+  'bg-emerald-100 text-emerald-500',
+  'bg-rose-100 text-rose-500',
 ]
+
+// page-number list with ellipsis for long ranges
+function pageNums(cur, total) {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
+  const out = [1]
+  const start = Math.max(2, cur - 1)
+  const end = Math.min(total - 1, cur + 1)
+  if (start > 2) out.push('…')
+  for (let p = start; p <= end; p++) out.push(p)
+  if (end < total - 1) out.push('…')
+  out.push(total)
+  return out
+}
+
+function MemberCard({ m, i }) {
+  return (
+    <SpotlightCard
+      as="article"
+      className="group relative flex h-full flex-col items-center rounded-2xl border border-gray-100 bg-white px-5 py-6 text-center shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-cardHover"
+    >
+      {/* crown badge */}
+      <span className={`absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full ${CROWN_TINTS[i % CROWN_TINTS.length]}`}>
+        <Crown className="h-4 w-4" />
+      </span>
+
+      {m.img ? (
+        <img
+          src={m.img}
+          alt={m.name}
+          loading="lazy"
+          className="h-20 w-20 rounded-full object-cover object-top shadow-sm ring-4 ring-gray-100 transition-all duration-300 group-hover:ring-gold/40"
+        />
+      ) : (
+        <Avatar name={m.name} className="h-20 w-20 text-xl ring-4 ring-gray-100" />
+      )}
+
+      <h3 className="mt-4 font-heading text-[15px] font-bold leading-tight text-navy">{m.name}</h3>
+      <p className="mt-2 line-clamp-2 min-h-[32px] text-xs leading-relaxed text-muted">{m.work || 'Club Member'}</p>
+    </SpotlightCard>
+  )
+}
+
+function MemberRow({ m, i }) {
+  return (
+    <SpotlightCard
+      as="article"
+      className="group relative flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-card transition-all duration-300 hover:shadow-cardHover"
+    >
+      {m.img ? (
+        <img src={m.img} alt={m.name} loading="lazy" className="h-14 w-14 shrink-0 rounded-full object-cover object-top ring-2 ring-gray-100" />
+      ) : (
+        <Avatar name={m.name} className="h-14 w-14 text-base ring-2 ring-gray-100" />
+      )}
+
+      <div className="min-w-0 flex-1">
+        <h3 className="truncate font-heading text-[15px] font-bold text-navy">{m.name}</h3>
+        <p className="mt-0.5 flex items-center gap-1 text-xs text-muted">
+          <Briefcase className="h-3 w-3 shrink-0 text-muted" /> {m.work || 'Club Member'}
+        </p>
+      </div>
+
+      <span className={`hidden h-8 w-8 shrink-0 items-center justify-center rounded-full sm:flex ${CROWN_TINTS[i % CROWN_TINTS.length]}`}>
+        <Crown className="h-4 w-4" />
+      </span>
+    </SpotlightCard>
+  )
+}
 
 export default function Directory() {
   const [query, setQuery] = useState('')
+  const [view, setView] = useState('grid') // 'grid' | 'list'
+  const [page, setPage] = useState(1)
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return members
     return members.filter(
-      (m) => m.name.toLowerCase().includes(q) || m.work.toLowerCase().includes(q),
+      (m) => m.name.toLowerCase().includes(q) || (m.work || '').toLowerCase().includes(q),
     )
   }, [query])
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const safePage = Math.min(page, pageCount)
+  const pageItems = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
+
+  const onSearch = (v) => {
+    setQuery(v)
+    setPage(1)
+  }
+  const goPage = (p) => {
+    setPage(p)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     <>
@@ -158,52 +120,118 @@ export default function Directory() {
       />
 
       <div className="bg-canvas">
-        <div className="container-x py-12">
-          {/* search bar */}
-          <div className="mx-auto mb-8 flex max-w-3xl items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3 shadow-sm focus-within:border-gold/60 focus-within:ring-2 focus-within:ring-gold/20">
-            <Search className="h-5 w-5 shrink-0 text-navy" />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by name or profession..."
-              className="w-full bg-transparent text-sm text-ink placeholder:text-muted/70 focus:outline-none"
-            />
-            {query && (
-              <button onClick={() => setQuery('')} aria-label="Clear search" className="text-muted hover:text-navy">
-                <X className="h-4 w-4" />
+        <div className="container-x py-10">
+          {/* ── toolbar: count · search · view toggle ── */}
+          <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-card lg:flex-row lg:items-center">
+            <div className="flex shrink-0 items-center gap-3">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-navy/5 text-navy">
+                <Users className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="font-heading text-2xl font-extrabold leading-none text-navy">{filtered.length}</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted">Members Found</p>
+              </div>
+            </div>
+
+            <div className="flex flex-1 items-center gap-2 rounded-full border border-gray-200 bg-canvas px-4 py-2.5 focus-within:border-gold/60 focus-within:ring-2 focus-within:ring-gold/20">
+              <Search className="h-5 w-5 shrink-0 text-navy" />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => onSearch(e.target.value)}
+                placeholder="Search by name or profession..."
+                className="w-full bg-transparent text-sm text-ink placeholder:text-muted/70 focus:outline-none"
+              />
+              {query && (
+                <button onClick={() => onSearch('')} aria-label="Clear search" className="text-muted hover:text-navy">
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+
+            <div className="flex shrink-0 flex-wrap items-center gap-2">
+              <button
+                onClick={() => setView('grid')}
+                className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition ${
+                  view === 'grid' ? 'bg-navy text-white shadow-sm' : 'border border-gray-200 text-navy hover:bg-canvas'
+                }`}
+              >
+                <LayoutGrid className="h-4 w-4" /> Grid View
               </button>
-            )}
+              <button
+                onClick={() => setView('list')}
+                className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition ${
+                  view === 'list' ? 'bg-navy text-white shadow-sm' : 'border border-gray-200 text-navy hover:bg-canvas'
+                }`}
+              >
+                <List className="h-4 w-4" /> List View
+              </button>
+            </div>
           </div>
 
-          {/* count */}
-          <p className="mb-6 flex items-center justify-center gap-2 text-sm text-muted">
-            <Users className="h-4 w-4 text-gold" />
-            <span className="font-bold text-navy">{filtered.length}</span> members
-          </p>
+          {/* ── members ── */}
+          {pageItems.length > 0 ? (
+            <>
+              {view === 'grid' ? (
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {pageItems.map((m, i) => (
+                    <Reveal key={m.name + i} variant="up" delay={(i % 8) * 40} className="h-full">
+                      <MemberCard m={m} i={(safePage - 1) * PAGE_SIZE + i} />
+                    </Reveal>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                  {pageItems.map((m, i) => (
+                    <Reveal key={m.name + i} variant="up" delay={(i % 8) * 35}>
+                      <MemberRow m={m} i={(safePage - 1) * PAGE_SIZE + i} />
+                    </Reveal>
+                  ))}
+                </div>
+              )}
 
-          {/* members grid */}
-          {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((m, i) => (
-                <Reveal key={m.name} variant="up" delay={(i % 9) * 50} className="h-full">
-                  <SpotlightCard
-                    as="article"
-                    className="flex h-full items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-cardHover"
+              {/* ── pagination ── */}
+              {pageCount > 1 && (
+                <div className="mt-10 flex items-center justify-center gap-1.5">
+                  <button
+                    onClick={() => goPage(safePage - 1)}
+                    disabled={safePage === 1}
+                    aria-label="Previous page"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-navy transition hover:bg-navy hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-navy"
                   >
-                    <Avatar name={m.name} className="h-12 w-12 text-sm" />
-                    <div className="min-w-0">
-                      <h3 className="truncate font-heading text-[15px] font-bold text-navy">{m.name}</h3>
-                      <p className="truncate text-xs text-muted">{m.work || 'Rotarian'}</p>
-                    </div>
-                  </SpotlightCard>
-                </Reveal>
-              ))}
-            </div>
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  {pageNums(safePage, pageCount).map((p, idx) =>
+                    p === '…' ? (
+                      <span key={`e${idx}`} className="px-2 text-sm text-muted">…</span>
+                    ) : (
+                      <button
+                        key={p}
+                        onClick={() => goPage(p)}
+                        className={`flex h-9 min-w-[36px] items-center justify-center rounded-lg px-2 text-sm font-bold transition ${
+                          p === safePage ? 'bg-navy text-white shadow-sm' : 'border border-gray-200 bg-white text-navy hover:bg-canvas'
+                        }`}
+                      >
+                        {p}
+                      </button>
+                    ),
+                  )}
+                  <button
+                    onClick={() => goPage(safePage + 1)}
+                    disabled={safePage === pageCount}
+                    aria-label="Next page"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-navy transition hover:bg-navy hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-navy"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
-            <p className="py-16 text-center text-muted">
+            <div className="flex flex-col items-center gap-3 py-16 text-center text-muted">
+              <Users className="h-10 w-10 text-gray-300" />
               No members found matching &ldquo;{query}&rdquo;.
-            </p>
+            </div>
           )}
         </div>
       </div>
