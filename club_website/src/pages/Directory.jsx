@@ -53,7 +53,7 @@ function MemberCard({ m, i }) {
       )}
 
       <h3 className="mt-4 font-heading text-[15px] font-bold leading-tight text-navy">{m.name}</h3>
-      <p className="mt-2 line-clamp-2 min-h-[32px] text-xs leading-relaxed text-muted">{m.work || 'Club Member'}</p>
+      <p className="mt-2 line-clamp-2 min-h-[32px] text-xs leading-relaxed text-muted">{m.work || ''}</p>
     </SpotlightCard>
   )
 }
@@ -72,9 +72,11 @@ function MemberRow({ m, i }) {
 
       <div className="min-w-0 flex-1">
         <h3 className="truncate font-heading text-[15px] font-bold text-navy">{m.name}</h3>
-        <p className="mt-0.5 flex items-center gap-1 text-xs text-muted">
-          <Briefcase className="h-3 w-3 shrink-0 text-muted" /> {m.work || 'Club Member'}
-        </p>
+        {m.work && (
+          <p className="mt-0.5 flex items-center gap-1 text-xs text-muted">
+            <Briefcase className="h-3 w-3 shrink-0 text-muted" /> {m.work}
+          </p>
+        )}
       </div>
 
       <span className={`hidden h-8 w-8 shrink-0 items-center justify-center rounded-full sm:flex ${CROWN_TINTS[i % CROWN_TINTS.length]}`}>

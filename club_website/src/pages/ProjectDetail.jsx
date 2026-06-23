@@ -172,9 +172,7 @@ export default function ProjectDetail({ pid }) {
                       {focus.map((f, i) => (
                         <span
                           key={i}
-                          className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                            i === 0 ? 'bg-navy text-white' : 'border border-navy/15 bg-white text-navy'
-                          }`}
+                          className="rounded-full border border-navy/15 bg-white px-3 py-1 text-xs font-semibold text-navy"
                         >
                           {f}
                         </span>

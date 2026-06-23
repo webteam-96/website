@@ -1,4 +1,4 @@
-import { Calendar, CalendarDays, Newspaper, HeartHandshake, ArrowRight } from 'lucide-react'
+import { Calendar, Ticket, Newspaper, HeartHandshake, ArrowRight } from 'lucide-react'
 import Reveal from './Reveal'
 import SpotlightCard from './SpotlightCard'
 import { asset } from '../lib/asset'
@@ -18,7 +18,7 @@ const cards = [
     href: '#/calendar',
   },
   {
-    Icon: CalendarDays,
+    Icon: Ticket,
     title: 'Events',
     desc: 'Explore upcoming events and register to participate.',
     cta: 'View Events',

@@ -47,7 +47,7 @@ const links = [
     ],
   },
   { label: 'MEETINGS', href: '#/meetings' },
-  { label: 'PAST PRESIDENT', href: '#/past-presidents' },
+  { label: 'PAST PRESIDENTS', href: '#/past-presidents' },
 ]
 
 export default function Navbar() {

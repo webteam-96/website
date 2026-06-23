@@ -188,7 +188,7 @@ export default function Counters() {
           <span
             className={`${reveal} inline-flex cursor-default items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-gold transition-all duration-300 hover:scale-105 hover:bg-gold/20 hover:shadow-lg hover:shadow-gold/20`}
           >
-            Our Project
+            Our Projects
           </span>
           <SplitText
             as="h2"
