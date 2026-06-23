@@ -19,6 +19,10 @@ function stripCrossorigin() {
 export default defineConfig({
   plugins: [react(), stripCrossorigin()],
   server: {
+    // The Rotary API whitelists http://localhost:3000 for CORS, so the browser
+    // can call the live API directly from this origin — no proxy needed.
+    port: 3000,
+    strictPort: true,
     watch: {
       // Screenshot/preview PNGs live in the project root and can be locked while
       // being written (e.g. dropping in a new screenshot), which throws an
@@ -26,18 +30,6 @@ export default defineConfig({
       // PNGs are imported in src (all images are remote URLs), so it is safe to
       // exclude them from watching entirely.
       ignored: ['**/*.png'],
-    },
-    // Dev proxy → the Rotary public API. The API has no CORS headers, so the
-    // browser can't call it directly; the dev server proxies same-origin
-    // requests at /club-api/* to https://rizones45678.org/API/api/*.
-    // (Production uses the matching Vercel rewrite — see vercel.json.)
-    proxy: {
-      '/club-api': {
-        target: 'https://rizones45678.org/API/api',
-        changeOrigin: true,
-        secure: true,
-        rewrite: (p) => p.replace(/^\/club-api/, ''),
-      },
     },
   },
 })

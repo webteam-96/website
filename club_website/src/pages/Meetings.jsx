@@ -3,10 +3,14 @@ import Breadcrumb from '../components/Breadcrumb'
 import Reveal from '../components/Reveal'
 import SpotlightCard from '../components/SpotlightCard'
 import { projectsByAvenue } from '../data/projects'
+import { useApiData } from '../hooks/useApiData'
+import { useClub } from '../contexts/ClubData'
+import { getMeetings } from '../lib/clubApi'
+import { adaptProjects } from '../lib/adapters'
 
 // Club meetings & events = the "Club Events" (CE) avenue. Each links to its
 // full detail page (cost, beneficiaries, Area of Focus, gallery, prev/next).
-const meetings = projectsByAvenue('CE')
+const staticMeetings = projectsByAvenue('CE')
 
 function MeetingCard({ m }) {
   const photos = m.gallery?.length || 0
@@ -70,6 +74,12 @@ function MeetingCard({ m }) {
 }
 
 export default function Meetings() {
+  const { selectedYearId } = useClub()
+  const { data: meetings } = useApiData(
+    () => getMeetings(selectedYearId).then(adaptProjects),
+    [selectedYearId],
+    staticMeetings,
+  )
   return (
     <>
       <Breadcrumb

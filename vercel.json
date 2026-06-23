@@ -5,7 +5,6 @@
   "buildCommand": "node build-all.mjs",
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/club_website/club-api/:path*", "destination": "https://rizones45678.org/API/api/:path*" },
     { "source": "/club_website", "destination": "/club_website/index.html" },
     { "source": "/club_website/", "destination": "/club_website/index.html" },
     { "source": "/district_website/:path*", "destination": "/district_website/index.html" }

@@ -2,17 +2,14 @@
 // Contract mirrors RotaryApi ClubWebsitePublicDataController (see the
 // KaizenInfotech/RotaryIndia_Admin_API_Claude repo, Club_Website/src/lib/api.ts).
 //
-// The API has no CORS headers, so all JSON calls go through a same-origin proxy:
-//   dev  → vite.config.js server.proxy  (/club-api → rizones45678.org/API/api)
-//   prod → vercel.json rewrite          (/club_website/club-api → …/API/api)
-// Images are NOT proxied — see src/lib/media.js.
+// Calls go straight to the live API. The API CORS-whitelists specific origins
+// (e.g. http://localhost:3000), so run dev on port 3000. For production the
+// deployed domain must be added to the API's CORS allow-list.
+// Images load directly too — see src/lib/media.js.
 //
 // On any error / non-2xx, getJson returns null and getList returns [] so callers
 // can fall back to static data without try/catch everywhere.
-
-// BASE_URL ends with "/", so this resolves to "/club-api" (dev) or
-// "/club_website/club-api" (prod) — same origin, then proxied to the API.
-const API_BASE = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/club-api'
+const API_BASE = (import.meta.env.VITE_API_URL || 'https://rizones45678.org/API/api').replace(/\/+$/, '')
 
 // Thane Hills = clubId 1 (resolved via /by-host?host=rcthanehills.rotaryindia.org).
 export const CLUB_ID = Number(import.meta.env.VITE_CLUB_ID || 1)

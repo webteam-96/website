@@ -69,6 +69,60 @@ export const adaptAdvertisements = (dtos) =>
     .map((a) => ({ img: img(a.advertisementImagePath), url: a.documentPath ? img(a.documentPath) : '#' }))
     .filter((a) => a.img)
 
+// ── Project detail (ProjectDetailDto) → our detail shape ────────────────────
+// NOTE: the API has NO president name/email per project — those stay blank.
+export const adaptProjectDetail = (p) => {
+  if (!p) return null
+  const d = dmy(p.projectDate)
+  const gallery = (p.photos || []).map(img).filter(Boolean)
+  return {
+    id: String(p.id),
+    avenue: MODULE_TO_AVENUE[p.moduleKey] || p.moduleKey || '',
+    title: p.title,
+    date: d.date,
+    day: d.day,
+    mon: d.mon,
+    desc: p.description || '',
+    cause: p.areaOfFocus || '',
+    subCat: p.category || '',
+    subSub: p.subCategory || '',
+    img: gallery[0] || null,
+    gallery,
+    cost: p.projectCost != null ? String(p.projectCost) : '',
+    beneficiaries: p.directBeneficiaries != null ? String(p.directBeneficiaries) : '',
+    rotarians: p.rotariansInvolved != null ? String(p.rotariansInvolved) : '',
+    manHours: p.manHours != null ? String(p.manHours) : '',
+    presidentName: '', // not provided by the API
+    presidentEmail: '', // not provided by the API
+  }
+}
+
+// ── About (AboutDto) → { content, meetingInfo, contacts, socials } ──────────
+export const adaptAbout = (a) => {
+  if (!a) return null
+  return {
+    content: a.content || '',
+    contacts: a.contacts || [],
+    socials: a.socials || [],
+    meetingInfo: {
+      day: a.meetingDay || '',
+      time: a.meetingFromTime || '',
+      venue: a.meetingAddress || '',
+      city: a.city || '',
+      state: a.state || '',
+      pincode: a.pincode || '',
+      lat: a.latitude,
+      lng: a.longitude,
+    },
+  }
+}
+
+// ── Dignitaries (IP / DG DTOs) → { name, role, img, bio } ───────────────────
+export const adaptIntlPresident = (d) =>
+  d ? { name: d.name, role: d.designation || 'RI President', img: img(d.profilePhotoPath), bio: d.description || '' } : null
+export const adaptDistrictGovernor = (d) =>
+  d ? { name: d.memberName, role: 'District Governor', img: img(d.profilePhoto), bio: d.description || '' } : null
+
 // ── Projects (PublicProjectDto[]) → our project card shape ──────────────────
 // moduleKey from the API maps onto our avenue codes.
 const MODULE_TO_AVENUE = {
