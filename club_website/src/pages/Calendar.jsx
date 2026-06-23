@@ -243,14 +243,15 @@ export default function Calendar() {
                     const marks = byDay[day]
                     const isToday = isCurrentMonth && day === TODAY.day
                     const isSel = selected === day
-                    const active = isToday || isSel
                     return (
                       <button
                         key={day}
                         onClick={() => setSelected(isSel ? null : day)}
                         disabled={!marks}
                         className={`relative mx-auto flex h-9 w-9 flex-col items-center justify-center rounded-full text-[12px] font-semibold transition ${
-                          active
+                          isSel
+                            ? 'bg-gold font-extrabold text-navy shadow-md ring-2 ring-gold/40'
+                            : isToday
                             ? 'bg-navy-deep font-extrabold text-white'
                             : marks
                             ? 'text-ink hover:bg-canvas'
@@ -261,7 +262,7 @@ export default function Calendar() {
                         {marks && (
                           <span className="absolute bottom-[3px] flex gap-[2px]">
                             {ORDER.map((k) =>
-                              marks[k] ? <span key={k} className={`h-1.5 w-1.5 rounded-full ${active ? 'bg-white' : CATS[k].dot}`} /> : null,
+                              marks[k] ? <span key={k} className={`h-1.5 w-1.5 rounded-full ${isSel ? 'bg-navy' : isToday ? 'bg-white' : CATS[k].dot}`} /> : null,
                             )}
                           </span>
                         )}
