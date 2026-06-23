@@ -15,7 +15,8 @@ import Meetings from './pages/Meetings'
 import PastPresidents from './pages/PastPresidents'
 import Newsletter from './pages/Newsletter'
 import DignitaryProfile from './pages/DignitaryProfile'
-import { ClubDataProvider } from './contexts/ClubData'
+import { WebsiteProvider } from './contexts/WebsiteContext'
+import { YearProvider } from './contexts/YearContext'
 
 function useHashRoute() {
   const [route, setRoute] = useState(() => window.location.hash.replace(/^#/, '') || '/')
@@ -97,7 +98,8 @@ export default function App() {
   }, [])
 
   return (
-    <ClubDataProvider>
+    <WebsiteProvider>
+    <YearProvider>
     <div className="min-h-screen overflow-x-clip bg-canvas">
       <RotaryLoader active={appLoading} duration={glideMs} minDuration={400} label="Rotary Club of Thane Hills" />
       <Navbar />
@@ -116,6 +118,7 @@ export default function App() {
       <Footer />
       <ScrollToTop />
     </div>
-    </ClubDataProvider>
+    </YearProvider>
+    </WebsiteProvider>
   )
 }

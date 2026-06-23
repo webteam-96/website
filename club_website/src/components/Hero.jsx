@@ -2,24 +2,12 @@ import { useEffect, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { banners as staticBanners, advertisements as staticAds } from '../data/site'
 import Squares from './Squares'
-import { useApiData } from '../hooks/useApiData'
-import { useClub } from '../contexts/ClubData'
-import { getBanners, getAdvertisements } from '../lib/clubApi'
-import { adaptBanners, adaptAdvertisements } from '../lib/adapters'
+import { useBanners, useAdvertisements } from '../hooks/clubData'
 
 // Hero: banner slider (images only) on the left, advertisement slider on the right.
 export default function Hero() {
-  const { selectedYearId } = useClub()
-  const { data: banners } = useApiData(
-    () => getBanners(selectedYearId).then(adaptBanners),
-    [selectedYearId],
-    staticBanners,
-  )
-  const { data: advertisements } = useApiData(
-    () => getAdvertisements(selectedYearId).then(adaptAdvertisements),
-    [selectedYearId],
-    staticAds,
-  )
+  const { data: banners } = useBanners(staticBanners)
+  const { data: advertisements } = useAdvertisements(staticAds)
 
   const [idx, setIdx] = useState(0)
   const count = banners.length

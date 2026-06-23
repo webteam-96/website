@@ -2,10 +2,7 @@ import { useMemo, useState } from 'react'
 import { Search, UserSearch } from 'lucide-react'
 import Breadcrumb from '../components/Breadcrumb'
 import DirectorCard from '../components/DirectorCard'
-import { useApiData } from '../hooks/useApiData'
-import { useClub } from '../contexts/ClubData'
-import { getBoardOfDirectors } from '../lib/clubApi'
-import { adaptDirectors } from '../lib/adapters'
+import { useDirectors } from '../hooks/clubData'
 
 // Board of Directors 2025-26, crawled from the club's official site
 // (rcthanehills.rotaryindia.org → Directors.aspx?year=2025-2026), including the
@@ -70,13 +67,8 @@ const staticDirectors = [
 
 export default function Directors() {
   const [query, setQuery] = useState('')
-  const { selectedYearId } = useClub()
 
-  const { data: directors } = useApiData(
-    () => getBoardOfDirectors(selectedYearId).then(adaptDirectors),
-    [selectedYearId],
-    staticDirectors,
-  )
+  const { data: directors } = useDirectors(staticDirectors)
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()

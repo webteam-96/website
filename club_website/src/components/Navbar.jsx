@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { Menu, X, ChevronDown, CalendarRange, LogIn } from 'lucide-react'
 import Logo from './Logo'
 import { projectAvenues } from '../data/projects'
-import { useClub } from '../contexts/ClubData'
+import { useYear } from '../contexts/YearContext'
 
 const fmtYear = (y) => y.replace(/^(\d{4})-\d{2}(\d{2})$/, '$1-$2')
 
 // Compact Rotary-year selector shown in the header.
 function YearSelect({ className = '' }) {
-  const { years, selectedYearLabel, selectYear } = useClub()
+  const { years, selectedYearLabel, selectYear } = useYear()
   return (
     <div className={`relative ${className}`}>
       <CalendarRange className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gold" />

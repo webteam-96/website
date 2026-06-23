@@ -25,11 +25,8 @@ import {
 import Breadcrumb from '../components/Breadcrumb'
 import Reveal from '../components/Reveal'
 import SpotlightCard from '../components/SpotlightCard'
-import { getProject, projectsByAvenue, avenueOf } from '../data/projects'
-import { useApiData } from '../hooks/useApiData'
-import { useClub } from '../contexts/ClubData'
-import { getProjectDetail } from '../lib/clubApi'
-import { adaptProjectDetail } from '../lib/adapters'
+import { projectsByAvenue, avenueOf } from '../data/projects'
+import { useProjectDetail } from '../hooks/clubData'
 
 const STATS = [
   { key: 'cost', label: 'Total Cost', icon: IndianRupee, accent: 'from-amber-400 to-amber-600', prefix: '₹' },
@@ -39,12 +36,7 @@ const STATS = [
 ]
 
 export default function ProjectDetail({ pid }) {
-  const { selectedYearId } = useClub()
-  const { data: project } = useApiData(
-    () => getProjectDetail(pid, selectedYearId).then(adaptProjectDetail),
-    [pid, selectedYearId],
-    getProject(pid),
-  )
+  const { data: project } = useProjectDetail(pid)
   const [active, setActive] = useState(0)
   const [lightbox, setLightbox] = useState(false)
 

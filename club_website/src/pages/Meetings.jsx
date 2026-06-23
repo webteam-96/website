@@ -3,10 +3,7 @@ import Breadcrumb from '../components/Breadcrumb'
 import Reveal from '../components/Reveal'
 import SpotlightCard from '../components/SpotlightCard'
 import { projectsByAvenue } from '../data/projects'
-import { useApiData } from '../hooks/useApiData'
-import { useClub } from '../contexts/ClubData'
-import { getMeetings } from '../lib/clubApi'
-import { adaptProjects } from '../lib/adapters'
+import { useMeetings } from '../hooks/clubData'
 
 // Club meetings & events = the "Club Events" (CE) avenue. Each links to its
 // full detail page (cost, beneficiaries, Area of Focus, gallery, prev/next).
@@ -74,12 +71,7 @@ function MeetingCard({ m }) {
 }
 
 export default function Meetings() {
-  const { selectedYearId } = useClub()
-  const { data: meetings } = useApiData(
-    () => getMeetings(selectedYearId).then(adaptProjects),
-    [selectedYearId],
-    staticMeetings,
-  )
+  const { data: meetings } = useMeetings(staticMeetings)
   return (
     <>
       <Breadcrumb

@@ -1,15 +1,14 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
-import { getYears } from '../lib/clubApi'
+import { fetchYears } from '../services/clubService'
+import { useWebsiteId } from './WebsiteContext'
 import { projectYears, currentYear } from '../data/projects'
 
-// ── Year context ────────────────────────────────────────────────────────────
-// Holds the club's Rotary years + the selected year, and exposes selectYear().
-// Year-dependent data hooks depend on `selectedYearId`, so changing the year in
-// the header refetches the whole site's year-scoped data. Until the backend
-// /years endpoint is fixed, we fall back to the static year list (no ids → API
-// calls send no yearId and return the current year once those endpoints work).
+// The header year filter lives here. Years are loaded for the active websiteId;
+// changing the year updates `selectedYearId`, which every year-scoped data hook
+// depends on — so the whole page refetches on year change. Falls back to the
+// static year list until the backend /years endpoint is available.
 
-const Ctx = createContext(null)
+const YearContext = createContext(null)
 
 const FALLBACK_YEARS = projectYears.map((label) => ({
   id: null,
@@ -17,14 +16,16 @@ const FALLBACK_YEARS = projectYears.map((label) => ({
   isCurrent: label === currentYear,
 }))
 
-export function ClubDataProvider({ children }) {
+export function YearProvider({ children }) {
+  const websiteId = useWebsiteId()
   const [years, setYears] = useState(FALLBACK_YEARS)
   const [selectedYearId, setSelectedYearId] = useState(null)
   const [selectedYearLabel, setSelectedYearLabel] = useState(currentYear)
 
+  // (re)load the year list whenever the active website changes
   useEffect(() => {
     let alive = true
-    getYears().then((ys) => {
+    fetchYears(websiteId).then((ys) => {
       if (!alive || !ys || !ys.length) return
       setYears(ys)
       const cur = ys.find((y) => y.isCurrent) || ys[0]
@@ -34,9 +35,9 @@ export function ClubDataProvider({ children }) {
     return () => {
       alive = false
     }
-  }, [])
+  }, [websiteId])
 
-  // accepts a year id or a year label (the header <select> passes the label)
+  // accepts a year id or label (the header <select> passes the label)
   const selectYear = useCallback(
     (value) => {
       const y = years.find((yy) => String(yy.id) === String(value) || yy.yearLabel === value)
@@ -52,15 +53,15 @@ export function ClubDataProvider({ children }) {
   )
 
   return (
-    <Ctx.Provider value={{ years, selectedYearId, selectedYearLabel, selectYear }}>
+    <YearContext.Provider value={{ years, selectedYearId, selectedYearLabel, selectYear }}>
       {children}
-    </Ctx.Provider>
+    </YearContext.Provider>
   )
 }
 
-export function useClub() {
+export function useYear() {
   return (
-    useContext(Ctx) || {
+    useContext(YearContext) || {
       years: FALLBACK_YEARS,
       selectedYearId: null,
       selectedYearLabel: currentYear,
@@ -68,7 +69,3 @@ export function useClub() {
     }
   )
 }
-
-// useApiData lives in ../hooks/useApiData so this module's exports stay
-// Fast-Refresh-friendly. Re-exported here for convenience.
-export { useApiData } from '../hooks/useApiData'

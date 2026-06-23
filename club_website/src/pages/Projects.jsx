@@ -4,10 +4,7 @@ import Breadcrumb from '../components/Breadcrumb'
 import Reveal from '../components/Reveal'
 import SpotlightCard from '../components/SpotlightCard'
 import { projects as staticProjects, projectAvenues, avenueOf } from '../data/projects'
-import { useApiData } from '../hooks/useApiData'
-import { useClub } from '../contexts/ClubData'
-import { getProjects } from '../lib/clubApi'
-import { adaptProjects } from '../lib/adapters'
+import { useProjects } from '../hooks/clubData'
 
 // "Club Events" (CE) duplicates the dedicated Meetings page, and "Club Service"
 // (CS) is excluded by request — both are hidden from the Projects page (tabs +
@@ -64,13 +61,8 @@ function ProjectCard({ p, i }) {
 export default function Projects({ avenue = null }) {
   const [active, setActive] = useState(avenue)
   const [query, setQuery] = useState('')
-  const { selectedYearId } = useClub()
 
-  const { data: allProjects } = useApiData(
-    () => getProjects(selectedYearId).then(adaptProjects),
-    [selectedYearId],
-    staticProjects,
-  )
+  const { data: allProjects } = useProjects(staticProjects)
   const visibleProjects = allProjects.filter((p) => !HIDDEN_AVENUES.includes(p.avenue))
   const byAvenue = (code) => allProjects.filter((p) => p.avenue === code)
 

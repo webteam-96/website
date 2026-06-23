@@ -6,18 +6,12 @@ import Reveal from '../components/Reveal'
 import SpotlightCard from '../components/SpotlightCard'
 import CountUp from '../components/CountUp'
 import { presidents as staticPresidents } from '../data/presidents'
-import { useApiData } from '../hooks/useApiData'
-import { getPastPresidents } from '../lib/clubApi'
-import { adaptPastPresidents } from '../lib/adapters'
+import { usePastPresidents } from '../hooks/clubData'
 
 export default function PastPresidents() {
   const [query, setQuery] = useState('')
 
-  const { data: presidents } = useApiData(
-    () => getPastPresidents().then(adaptPastPresidents),
-    [],
-    staticPresidents,
-  )
+  const { data: presidents } = usePastPresidents(staticPresidents)
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()

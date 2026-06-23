@@ -2,19 +2,11 @@ import { FileText, Download, Calendar } from 'lucide-react'
 import Breadcrumb from '../components/Breadcrumb'
 import Reveal from '../components/Reveal'
 import { newsletters as staticNewsletters } from '../data/site'
-import { useApiData } from '../hooks/useApiData'
-import { useClub } from '../contexts/ClubData'
-import { getNewsletters } from '../lib/clubApi'
-import { adaptNewsletters } from '../lib/adapters'
+import { useNewsletters } from '../hooks/clubData'
 
 // HILLS ECHOES — the club's monthly e-bulletins. Each card links to the source PDF.
 export default function Newsletter() {
-  const { selectedYearId } = useClub()
-  const { data: newsletters } = useApiData(
-    () => getNewsletters(selectedYearId, 24).then(adaptNewsletters),
-    [selectedYearId],
-    staticNewsletters,
-  )
+  const { data: newsletters } = useNewsletters(24, staticNewsletters)
   return (
     <>
       <Breadcrumb
