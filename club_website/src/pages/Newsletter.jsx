@@ -1,10 +1,12 @@
 import { FileText, Download, Calendar } from 'lucide-react'
 import Breadcrumb from '../components/Breadcrumb'
 import Reveal from '../components/Reveal'
-import { newsletters } from '../data/site'
+import { newsletters as staticNewsletters } from '../data/site'
+import { useNewsletters } from '../hooks/clubData'
 
 // HILLS ECHOES — the club's monthly e-bulletins. Each card links to the source PDF.
 export default function Newsletter() {
+  const { data: newsletters } = useNewsletters(24, staticNewsletters)
   return (
     <>
       <Breadcrumb

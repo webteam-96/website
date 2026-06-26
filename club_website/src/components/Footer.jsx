@@ -1,98 +1,92 @@
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
-import { GearMark } from './Logo'
+import { Mail, Phone, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
 
+// Exact replica of the live rcthanehills.rotaryindia.org footer.
 const quickLinks = [
   { label: 'Home', href: '#/' },
-  { label: 'About Us', href: '#/about' },
-  { label: 'Directors', href: '#/directors' },
   { label: 'Directory', href: '#/directory' },
+  { label: 'Directors', href: '#/directors' },
   { label: 'Calendar', href: '#/calendar' },
-  { label: 'Projects', href: '#/projects' },
-  { label: 'Newsletters', href: '#/newsletter' },
-  { label: 'Past Presidents', href: '#/past-presidents' },
-]
-const socials = [
-  { Icon: Facebook, href: 'https://www.facebook.com/rcthanehills/' },
-  { Icon: Twitter, href: 'https://twitter.com/RCThaneHills' },
-  { Icon: Instagram, href: 'https://www.instagram.com/rotaryclubofthanehills/?hl=en' },
-  { Icon: Linkedin, href: 'https://www.linkedin.com/company/rotary-club-of-thane-hills/' },
+  { label: 'Newsletter', href: '#/newsletter' },
 ]
 
-function Column({ title, items }) {
-  return (
-    <div>
-      <h4 className="mb-4 font-heading text-sm font-bold uppercase tracking-wider text-gold">{title}</h4>
-      <ul className="space-y-2.5">
-        {items.map((i) => (
-          <li key={i.label}>
-            <a href={i.href} className="text-sm text-white/70 transition-colors hover:text-gold">{i.label}</a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
+const socials = [
+  { Icon: Facebook, label: 'Facebook', href: 'https://www.facebook.com/rcthanehills/' },
+  { Icon: Twitter, label: 'Twitter', href: 'https://twitter.com/RCThaneHills' },
+  { Icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/rotaryclubofthanehills/?hl=en' },
+  { Icon: Linkedin, label: 'Linkedin', href: 'https://www.linkedin.com/company/rotary-club-of-thane-hills/' },
+]
+
+const INDIGO = '#2D3383'
+const GOLD = '#FFCC00'
 
 export default function Footer() {
+  const year = new Date().getFullYear()
+
   return (
-    <footer className="bg-navy-deep text-white">
-      <div className="container-x grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-3">
-        {/* Brand */}
-        <div className="lg:col-span-1">
-          <div className="flex items-center gap-3">
-            <GearMark className="h-10 w-10" />
-            <div className="leading-none">
-              <span className="block font-heading text-base font-extrabold text-white">Rotary</span>
-              <span className="text-[10px] uppercase tracking-wide text-white/70">Club of Thane Hills</span>
-            </div>
+    <footer className="text-center" style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+      {/* ── footer_first (indigo) ───────────────────────────────────── */}
+      <div className="px-4 pb-7 pt-10 text-white" style={{ backgroundColor: INDIGO }}>
+        <div className="mx-auto max-w-4xl">
+          <h3 className="font-light leading-tight" style={{ fontSize: '28px' }}>
+            Quick Links
+          </h3>
+          {/* gold dots */}
+          <div className="mt-2 flex items-center justify-center gap-1.5">
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: GOLD }} />
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: GOLD }} />
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: GOLD }} />
           </div>
-          <p className="mt-4 text-sm leading-relaxed text-white/70">
-            Service Above Self. We are committed to making a positive difference in the lives of
-            people across Thane through fellowship and service.
-          </p>
-          <div className="mt-5 flex gap-3">
-            {socials.map(({ Icon, href }) => (
-              <a
-                key={href}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-gold hover:text-navy"
-              >
-                <Icon className="h-4 w-4" />
-              </a>
+
+          {/* quick-link nav */}
+          <ul className="mt-7 flex flex-wrap items-center justify-center gap-x-7 gap-y-2">
+            {quickLinks.map((l) => (
+              <li key={l.label}>
+                <a href={l.href} className="text-white transition-opacity hover:opacity-75" style={{ fontSize: '16px' }}>
+                  {l.label}
+                </a>
+              </li>
             ))}
-          </div>
-        </div>
-
-        <Column title="Quick Links" items={quickLinks} />
-
-        {/* Contact */}
-        <div>
-          <h4 className="mb-4 font-heading text-sm font-bold uppercase tracking-wider text-gold">Contact Us</h4>
-          <ul className="space-y-3 text-sm text-white/70">
-            <li className="flex items-start gap-3">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-              Smt. Savitridevi Thirani High School, Road No. 1, Vartak Nagar, Thane West, Maharashtra 400606
-            </li>
-            <li className="flex items-center gap-3">
-              <Phone className="h-4 w-4 shrink-0 text-gold" />
-              <a href="tel:9820063775" className="hover:text-gold">9820063775</a>
-            </li>
-            <li className="flex items-center gap-3">
-              <Mail className="h-4 w-4 shrink-0 text-gold" />
-              <a href="mailto:samir_limaye@rediffmail.com" className="hover:text-gold">samir_limaye@rediffmail.com</a>
-            </li>
           </ul>
+
+          {/* divider */}
+          <div className="mx-auto my-6 h-px w-full max-w-[600px]" style={{ backgroundColor: '#eeeeee', opacity: 0.3 }} />
+
+          {/* contact details */}
+          <div className="flex flex-wrap items-center justify-center gap-x-9 gap-y-2" style={{ fontSize: '16px' }}>
+            <a href="mailto:samir_limaye@rediffmail.com" className="inline-flex items-center gap-2 text-white transition-opacity hover:opacity-75">
+              <Mail className="h-4 w-4" /> samir_limaye@rediffmail.com
+            </a>
+            <a href="tel:9820063775" className="inline-flex items-center gap-2 text-white transition-opacity hover:opacity-75">
+              <Phone className="h-4 w-4" /> 9820063775
+            </a>
+          </div>
         </div>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="container-x flex flex-col items-center justify-between gap-3 py-5 text-xs text-white/60 sm:flex-row">
-          <p>© 2025 Rotary Club of Thane Hills. All Rights Reserved.</p>
-          <div className="flex gap-5">
-            <a href="#" className="hover:text-gold">Privacy Policy</a>
-            <a href="#" className="hover:text-gold">Terms &amp; Conditions</a>
+      {/* ── footer_second (white) ───────────────────────────────────── */}
+      <div className="bg-white px-4 py-6">
+        <div className="mx-auto max-w-2xl">
+          {/* social links */}
+          <ul className="flex flex-wrap items-center justify-center gap-x-9 gap-y-2">
+            {socials.map(({ Icon, label, href }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 transition-opacity hover:opacity-75"
+                  style={{ color: '#333333', fontSize: '16px' }}
+                >
+                  <Icon className="h-4 w-4" style={{ color: INDIGO }} /> {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <hr className="my-4 border-gray-200" />
+
+          <div style={{ color: 'rgba(33, 37, 41, 0.75)', fontSize: '16px' }}>
+            Powered by Roster On Wheels <span>{year}</span> | All Rights Reserved.
           </div>
         </div>
       </div>

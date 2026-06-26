@@ -1,22 +1,36 @@
 import { User } from 'lucide-react'
 import { GearMark } from './Logo'
 import SpotlightCard from './SpotlightCard'
+import { asset } from '../lib/asset'
 
 // Horizontal director card: navy photo panel on the left, a white content
 // panel on the right separated by a gold-traced wave (S-curve) seam.
 export default function DirectorCard({ name, role, img }) {
+  const initials = name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
   return (
     <SpotlightCard as="article" className="group relative h-44 overflow-hidden rounded-2xl border border-gray-200 bg-navy shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-cardHover">
       {/* faint Rotary wheel watermark over the navy panel */}
       <GearMark className="pointer-events-none absolute -left-3 -top-3 h-16 w-16 opacity-20" />
 
-      {/* portrait photo */}
-      <img
-        src={img}
-        alt={name}
-        loading="lazy"
-        className="absolute inset-y-0 left-0 h-full w-1/2 object-cover object-top"
-      />
+      {/* portrait photo, or initials when the club has no photo */}
+      {img ? (
+        <img
+          src={asset(img)}
+          alt={name}
+          loading="lazy"
+          className="absolute inset-y-0 left-0 h-full w-1/2 object-cover object-top"
+        />
+      ) : (
+        <div className="absolute inset-y-0 left-0 flex h-full w-1/2 items-center justify-center">
+          <span className="font-heading text-4xl font-extrabold tracking-wide text-gold/90">{initials}</span>
+        </div>
+      )}
 
       {/* white content panel with curved left edge + gold seam line */}
       <svg

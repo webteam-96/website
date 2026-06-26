@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowRight, BarChart3, Loader2 } from 'lucide-react'
 import SplitText from './SplitText'
+import WorldMapBg from './WorldMapBg'
 
 // Live Rotary Club of Thane Hills project-impact figures.
 // In production these arrive from the backend — that's why they load on click,
@@ -65,7 +66,7 @@ function StatCard({ icon, value, prefix = '', label, run, delay }) {
     >
       {/* gradient border shell */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-white/[0.18] to-white/[0.04] p-px transition-colors duration-300 group-hover:from-gold/60 group-hover:to-gold/10">
-        <div className="relative overflow-hidden rounded-2xl bg-navy/70 p-6 text-center backdrop-blur-sm">
+        <div className="relative overflow-hidden rounded-2xl bg-navy/70 px-3 py-6 text-center backdrop-blur-sm">
           {/* faint ghost icon watermark */}
           <i
             className={`${icon} pointer-events-none absolute -right-3 -top-3 text-6xl text-white/[0.05]`}
@@ -78,7 +79,7 @@ function StatCard({ icon, value, prefix = '', label, run, delay }) {
               <i className={`${icon} text-xl`} aria-hidden="true" />
             </div>
           </div>
-          <div className="bg-gradient-to-b from-white to-white/70 bg-clip-text font-heading text-[22px] font-extrabold leading-none tabular-nums text-transparent sm:text-2xl xl:text-[26px]">
+          <div className="whitespace-nowrap bg-gradient-to-b from-white to-white/70 bg-clip-text font-heading text-base font-extrabold leading-none tracking-tight tabular-nums text-transparent sm:text-[22px] xl:text-2xl">
             {prefix}
             {n.toLocaleString('en-IN')}
           </div>
@@ -171,11 +172,12 @@ export default function Counters() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-gradient-to-br from-navy-deep via-navy to-navy-deep py-16"
+      className="relative overflow-hidden bg-gradient-to-br from-navy-deep via-navy to-navy-deep py-12 md:py-16"
       aria-label="Our project impact"
     >
-      {/* dotted texture + glows */}
-      <div className="impact-dots pointer-events-none absolute inset-0 opacity-60" />
+      {/* dotted world-map texture + glows */}
+      <WorldMapBg color="#ffffff" opacity={0.1} size="cover" />
+      <div className="impact-dots pointer-events-none absolute inset-0 opacity-30" />
       <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-gold/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-white/5 blur-3xl" />
       <div className="pointer-events-none absolute left-1/2 top-0 h-64 w-[60%] -translate-x-1/2 rounded-full bg-gold/[0.07] blur-3xl" />
@@ -186,7 +188,7 @@ export default function Counters() {
           <span
             className={`${reveal} inline-flex cursor-default items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-gold transition-all duration-300 hover:scale-105 hover:bg-gold/20 hover:shadow-lg hover:shadow-gold/20`}
           >
-            Our Impact
+            Our Projects
           </span>
           <SplitText
             as="h2"
@@ -215,13 +217,6 @@ export default function Counters() {
             >
               <ImpactCTA onClick={handleLoad} />
             </div>
-            <p
-              className={`${reveal} mt-5 flex items-center gap-1.5 text-xs text-white/50`}
-              style={{ transitionDelay: inView ? '0.55s' : '0s' }}
-            >
-              <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-gold" />
-              Hover to interact &middot; click to load the latest figures
-            </p>
           </div>
         )}
 
@@ -249,7 +244,7 @@ export default function Counters() {
               ))}
             </div>
             <div className="mt-12 text-center">
-              <a href="#" className="btn-gold">
+              <a href="#/projects" className="btn-gold">
                 View All Our Projects <ArrowRight className="h-4 w-4" />
               </a>
             </div>

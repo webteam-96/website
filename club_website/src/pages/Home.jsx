@@ -11,7 +11,7 @@ export default function Home() {
       <Hero />
       <Counters />
       <QuickLinks />
-      <section className="bg-canvas py-12">
+      <section className="bg-mesh bg-canvas py-12">
         <div className="container-x">
           <FeaturedProjects />
         </div>

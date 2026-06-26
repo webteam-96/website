@@ -1,10 +1,8 @@
 import Breadcrumb from '../components/Breadcrumb'
-import { GearMark } from '../components/Logo'
 import Reveal from '../components/Reveal'
 import SplitText from '../components/SplitText'
-import ScrollReveal from '../components/ScrollReveal'
 import TiltedCard from '../components/TiltedCard'
-import { landmarkProjects } from '../data/site'
+import { asset } from '../lib/asset'
 
 function SectionHeading({ children }) {
   return (
@@ -57,17 +55,11 @@ export default function About() {
 
             {/* Rotary logo card */}
             <TiltedCard className="flex items-center justify-center rounded-xl bg-[#FBF6EC] p-10">
-              <div className="flex flex-col items-center text-center">
-                <div className="flex items-center gap-2">
-                  <span className="font-heading text-4xl font-extrabold tracking-tight text-navy">
-                    Rotary
-                  </span>
-                  <GearMark className="h-12 w-12" />
-                </div>
-                <span className="mt-1 text-base font-semibold text-[#0a52b8]">
-                  Club of Thane Hills
-                </span>
-              </div>
+              <img
+                src={asset('/images/logo/rcth-wordmark.png')}
+                alt="Rotary Club of Thane Hills"
+                className="w-full max-w-[260px]"
+              />
             </TiltedCard>
           </div>
 
@@ -94,33 +86,6 @@ export default function About() {
                 initiatives and community-based projects through this foundation.
               </Reveal>
             </div>
-          </div>
-
-          <hr className="my-12 border-gray-200" />
-
-          {/* LANDMARK PROJECTS */}
-          <div>
-            <SectionHeading>Landmark Projects</SectionHeading>
-            <ScrollReveal
-              text="Over three decades, RCTH has completed numerous large-scale projects spanning infrastructure, healthcare, education and the environment. A few landmarks:"
-              className="mb-6 block text-[15px] leading-relaxed text-muted"
-            />
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {landmarkProjects.map((p, i) => (
-                <Reveal
-                  as="li"
-                  key={i}
-                  variant="up"
-                  delay={i * 80}
-                  className="flex items-start gap-3 rounded-xl border border-gray-100 bg-canvas/60 p-3.5 text-[14px] text-ink"
-                >
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gold/15 text-[11px] font-bold text-gold-cta">
-                    {i + 1}
-                  </span>
-                  {p}
-                </Reveal>
-              ))}
-            </ul>
           </div>
         </div>
       </div>
