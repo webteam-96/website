@@ -1,22 +1,8 @@
-import { useState, type ComponentType } from 'react'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import {
-  ArrowLeft,
-  CalendarDays,
-  Clock,
-  HandCoins,
-  Hash,
-  Landmark,
-  Mail,
-  Sparkles,
-  User,
-  Users,
-  UsersRound,
-} from 'lucide-react'
+import { ArrowLeft, Building2 } from 'lucide-react'
 import { getCategory, getProjectById } from '../data/projects'
 import PageBanner from './PageBanner'
-
-type Icon = ComponentType<{ className?: string; strokeWidth?: string | number }>
 
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -36,14 +22,6 @@ export default function ProjectDetailPage() {
     )
   }
 
-  const stats: { icon: Icon; label: string; value: string; bg: string; fg: string }[] = [
-    { icon: HandCoins, label: 'Project Cost', value: `₹ ${project.cost.toLocaleString('en-IN')}`, bg: 'bg-emerald-500/10', fg: 'text-emerald-600' },
-    { icon: Users, label: 'Beneficiaries', value: project.beneficiaries.toLocaleString('en-IN'), bg: 'bg-brand-blue/10', fg: 'text-brand-blue' },
-    { icon: Clock, label: 'Man Hours', value: project.manHours.toLocaleString('en-IN'), bg: 'bg-amber-500/15', fg: 'text-amber-600' },
-    { icon: UsersRound, label: 'Rotarians Involved', value: String(project.rotarians), bg: 'bg-violet-500/10', fg: 'text-violet-600' },
-    { icon: Sparkles, label: 'Rotaractors Involved', value: String(project.rotaractors), bg: 'bg-rose-500/10', fg: 'text-rose-500' },
-  ]
-
   const backTo = `/club-projects/${project.category}`
 
   return (
@@ -57,14 +35,9 @@ export default function ProjectDetailPage() {
         ]}
         width="max-w-[1100px]"
         rightSlot={
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="rounded-full bg-brand-gold px-3 py-1 text-[12px] font-semibold text-[#0a1f4d]">
-              {cat?.label}
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-[13px] text-white/80">
-              <CalendarDays className="h-4 w-4 text-brand-gold" strokeWidth={2} /> {project.date}
-            </span>
-          </div>
+          <span className="rounded-full bg-brand-gold px-3 py-1 text-[12px] font-semibold text-[#0a1f4d]">
+            {cat?.label}
+          </span>
         }
       />
 
@@ -74,60 +47,48 @@ export default function ProjectDetailPage() {
         </Link>
 
         {/* Gallery */}
-        <div className="grid gap-4 lg:grid-cols-[1.6fr_1fr]">
+        <div className={`grid gap-4 ${project.images.length > 1 ? 'lg:grid-cols-[1.6fr_1fr]' : ''}`}>
           <button
             type="button"
             onClick={() => setLightbox(project.images[active])}
             className="overflow-hidden rounded-2xl shadow-card"
           >
-            <img src={project.images[active]} alt={project.title} className="h-[260px] w-full object-cover sm:h-[380px]" />
+            <img src={project.images[active]} alt={project.title} className="h-[260px] w-full object-cover sm:h-[420px]" />
           </button>
-          <div className="grid grid-cols-4 gap-3 lg:grid-cols-2">
-            {project.images.map((src, i) => (
-              <button
-                key={src}
-                type="button"
-                onClick={() => setActive(i)}
-                className={`overflow-hidden rounded-xl ring-2 transition ${i === active ? 'ring-brand-blue' : 'ring-transparent hover:ring-brand-blue/40'}`}
-              >
-                <img src={src} alt={`${project.title} ${i + 1}`} className="h-16 w-full object-cover lg:h-[88px]" />
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Impact stats */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-5">
-          {stats.map((s) => (
-            <div key={s.label} className="flex items-center gap-3 rounded-[18px] bg-white p-4 shadow-card">
-              <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${s.bg} ${s.fg}`}>
-                <s.icon className="h-5 w-5" strokeWidth={2} />
-              </span>
-              <div className="min-w-0">
-                <p className="text-[18px] font-extrabold leading-none text-brand-bluedark">{s.value}</p>
-                <p className="mt-1 text-[12px] font-medium text-muted">{s.label}</p>
-              </div>
+          {project.images.length > 1 && (
+            <div className="grid grid-cols-4 gap-3 lg:grid-cols-2">
+              {project.images.map((src, i) => (
+                <button
+                  key={src}
+                  type="button"
+                  onClick={() => setActive(i)}
+                  className={`overflow-hidden rounded-xl ring-2 transition ${i === active ? 'ring-brand-blue' : 'ring-transparent hover:ring-brand-blue/40'}`}
+                >
+                  <img src={src} alt={`${project.title} ${i + 1}`} className="h-16 w-full object-cover lg:h-[88px]" />
+                </button>
+              ))}
             </div>
-          ))}
+          )}
         </div>
 
-        {/* About + club info */}
+        {/* About + organising club */}
         <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
           <section className="rounded-[20px] bg-white p-6 shadow-card sm:p-7">
             <h2 className="text-[18px] font-bold text-brand-bluedark">About the Project</h2>
-            <p className="mt-3 text-[14px] leading-relaxed text-muted">{project.details}</p>
+            <p className="mt-3 text-[14px] leading-relaxed text-muted">{project.description}</p>
           </section>
 
           <section className="rounded-[20px] bg-white p-6 shadow-card sm:p-7">
             <h2 className="text-[18px] font-bold text-brand-bluedark">Organised By</h2>
-            <p className="mt-1 text-[15px] font-semibold text-brand-blue">{project.clubName}</p>
-            <dl className="mt-4 space-y-3">
-              <InfoRow icon={Hash} label="Club ID" value={project.clubId} />
-              <InfoRow icon={Landmark} label="District No." value={project.districtNo} />
-              <InfoRow icon={CalendarDays} label="Project Date" value={project.date} />
-              <InfoRow icon={User} label="President" value={project.president} />
-              <InfoRow icon={Mail} label="President Email" value={project.presidentEmail} href={`mailto:${project.presidentEmail}`} />
-            </dl>
+            <div className="mt-4 flex items-start gap-3">
+              <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-blue/10 text-brand-blue">
+                <Building2 className="h-[18px] w-[18px]" strokeWidth={2} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted">Rotary Club</p>
+                <p className="text-[15px] font-semibold text-brand-blue">{project.clubName}</p>
+              </div>
+            </div>
           </section>
         </div>
       </div>
@@ -138,23 +99,5 @@ export default function ProjectDetailPage() {
         </div>
       )}
     </main>
-  )
-}
-
-function InfoRow({ icon: Icon, label, value, href }: { icon: Icon; label: string; value: string; href?: string }) {
-  return (
-    <div className="flex items-start gap-3">
-      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-blue/10 text-brand-blue">
-        <Icon className="h-[18px] w-[18px]" strokeWidth={2} />
-      </span>
-      <div className="min-w-0">
-        <dt className="text-[11px] font-semibold uppercase tracking-wide text-muted">{label}</dt>
-        {href ? (
-          <a href={href} className="break-words text-[13.5px] font-medium text-brand-blue hover:underline">{value}</a>
-        ) : (
-          <dd className="text-[13.5px] font-medium text-ink">{value}</dd>
-        )}
-      </div>
-    </div>
   )
 }

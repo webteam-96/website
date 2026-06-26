@@ -7,27 +7,15 @@ import {
   Clock,
   LayoutGrid,
   List,
-  Map,
-  MapPin,
   RotateCcw,
   Search,
-  Users,
-  UsersRound,
 } from 'lucide-react'
 import PageBanner from './PageBanner'
-import StatStrip from './StatStrip'
-import { AVENUES, CLUB_TYPES, DAYS, REGIONS, clubs, type Club } from '../data/clubs'
+import { DAYS, clubs, type Club } from '../data/clubs'
 
 const PAGE_SIZE = 12
 
 type Icon = ComponentType<{ className?: string; strokeWidth?: string | number }>
-
-const STATS: { icon: Icon; value: string; label: string; bg: string; fg: string }[] = [
-  { icon: Users, value: String(clubs.length), label: 'Clubs', bg: 'bg-brand-blue/10', fg: 'text-brand-blue' },
-  { icon: UsersRound, value: '2,834', label: 'Members', bg: 'bg-brand-gold/15', fg: 'text-brand-gold' },
-  { icon: Map, value: '23', label: 'Avenues', bg: 'bg-emerald-500/10', fg: 'text-emerald-600' },
-  { icon: MapPin, value: '6', label: 'Regions', bg: 'bg-violet-500/10', fg: 'text-violet-600' },
-]
 
 const initials = (s: string) =>
   s.replace(/\b(Rotary|Club|of)\b/gi, '').trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase()
@@ -42,9 +30,6 @@ const AVATAR_COLORS = [
 
 export default function ClubFinderPage() {
   const [query, setQuery] = useState('')
-  const [avenue, setAvenue] = useState('')
-  const [region, setRegion] = useState('')
-  const [clubType, setClubType] = useState('')
   const [day, setDay] = useState('')
   const [sort, setSort] = useState<'az' | 'za'>('az')
   const [view, setView] = useState<'grid' | 'list'>('grid')
@@ -53,19 +38,16 @@ export default function ClubFinderPage() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     const r = clubs.filter((c) => {
-      if (avenue && c.avenue !== avenue) return false
-      if (region && c.region !== region) return false
-      if (clubType && c.clubType !== clubType) return false
       if (day && c.meetingDay !== day) return false
-      if (q && ![c.name, c.city, c.president].some((f) => f.toLowerCase().includes(q))) return false
+      if (q && ![c.name, c.president].some((f) => f.toLowerCase().includes(q))) return false
       return true
     })
     r.sort((a, b) => (sort === 'az' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)))
     return r
-  }, [query, avenue, region, clubType, day, sort])
+  }, [query, day, sort])
 
   // Reset to page 1 whenever the result set changes.
-  useEffect(() => setPage(1), [query, avenue, region, clubType, day, sort])
+  useEffect(() => setPage(1), [query, day, sort])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const current = Math.min(page, totalPages)
@@ -74,9 +56,6 @@ export default function ClubFinderPage() {
 
   const resetFilters = () => {
     setQuery('')
-    setAvenue('')
-    setRegion('')
-    setClubType('')
     setDay('')
   }
 
@@ -87,7 +66,6 @@ export default function ClubFinderPage() {
         subtitle="Explore Rotary clubs across District 3170. Connect, collaborate and make a difference together."
         breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Club Finder' }]}
       />
-      <StatStrip stats={STATS} />
 
       <div className="mx-auto max-w-[1440px] px-5 py-7 sm:px-8">
           {/* Filter bar */}
@@ -101,15 +79,12 @@ export default function ClubFinderPage() {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search by club name, city or president…"
+                placeholder="Search by club name or president…"
                 aria-label="Search clubs"
                 className="w-full rounded-xl border border-divider bg-pagebg/40 py-2.5 pl-10 pr-3 text-sm text-ink outline-none transition-colors placeholder:text-muted focus:border-brand-blue/40 focus:bg-white focus:ring-2 focus:ring-brand-blue/15"
               />
             </div>
 
-            <Select icon={MapPin} value={avenue} onChange={setAvenue} placeholder="All Avenues" options={AVENUES} />
-            <Select icon={MapPin} value={region} onChange={setRegion} placeholder="All Regions" options={REGIONS} />
-            <Select value={clubType} onChange={setClubType} placeholder="All Club Types" options={CLUB_TYPES} />
             <Select icon={CalendarDays} value={day} onChange={setDay} placeholder="All Days" options={DAYS} />
 
             <div className="flex items-center gap-2.5">

@@ -11,11 +11,13 @@ function DignitaryTicket({
   role,
   term,
   photo,
+  club,
 }: {
   name: string
   role: string
   term: string
   photo: string
+  club?: string
 }) {
   const [failed, setFailed] = useState(false)
 
@@ -70,6 +72,11 @@ function DignitaryTicket({
           {role}
         </p>
         <p className="mt-1 text-[12px] font-medium text-slate-500">{term}</p>
+        {club && (
+          <p className="mt-0.5 text-[12px] font-medium text-slate-500">
+            Rotary Club of {club}
+          </p>
+        )}
       </div>
     </article>
   )
@@ -89,7 +96,7 @@ export default function DignitariesSection() {
 
       <div className="mt-4 grid flex-1 grid-cols-1 content-center gap-4">
         {dignitaries.map((d) => (
-          <DignitaryTicket key={d.name} name={d.name} role={d.role} term={d.term} photo={d.photo} />
+          <DignitaryTicket key={d.name} name={d.name} role={d.role} term={d.term} photo={d.photo} club={d.club} />
         ))}
       </div>
     </div>

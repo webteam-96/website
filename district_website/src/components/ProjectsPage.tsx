@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowRight, CalendarDays, Search, Users } from 'lucide-react'
+import { ArrowRight, Search } from 'lucide-react'
 import { getCategory, projectsByCategory } from '../data/projects'
 import PageBanner from './PageBanner'
 
@@ -60,15 +60,8 @@ export default function ProjectsPage() {
                 </div>
                 <div className="flex flex-1 flex-col p-5">
                   <h3 className="text-[16px] font-bold leading-snug text-brand-bluedark">{p.title}</h3>
-                  <p className="mt-1 flex items-center gap-1.5 text-[12.5px] font-medium text-muted">
-                    <CalendarDays className="h-4 w-4 text-brand-gold" strokeWidth={2} /> {p.date}
-                  </p>
-                  <p className="mt-2.5 line-clamp-2 flex-1 text-[13.5px] leading-relaxed text-muted">{p.description}</p>
-                  <div className="mt-3 flex items-center gap-4 border-t border-divider/70 pt-3 text-[12.5px] font-medium text-ink">
-                    <span className="flex items-center gap-1.5">
-                      <Users className="h-4 w-4 text-brand-blue" strokeWidth={2} /> {p.beneficiaries.toLocaleString('en-IN')} beneficiaries
-                    </span>
-                  </div>
+                  <p className="mt-1 text-[12.5px] font-semibold text-brand-blue">{p.clubName}</p>
+                  <p className="mt-2.5 line-clamp-3 flex-1 text-[13.5px] leading-relaxed text-muted">{p.description}</p>
                   <Link
                     to={`/projects/${p.id}`}
                     className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-lg bg-brand-blue px-4 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-brand-bluehover"

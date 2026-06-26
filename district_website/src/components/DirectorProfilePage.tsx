@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, Building2, Mail, MapPin, Phone, User } from 'lucide-react'
+import { ArrowLeft, Building2, Mail, User } from 'lucide-react'
 import { useState } from 'react'
 import { getCommitteeForDirector, getDirectorById } from '../data/directors'
 import PageBanner from './PageBanner'
@@ -74,27 +74,19 @@ export default function DirectorProfilePage() {
               <span className="mt-2 block h-[3px] w-12 rounded-full bg-brand-gold" />
 
               <dl className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <InfoRow icon={Building2} label="Club" value={director.club} />
-                <InfoRow icon={MapPin} label="City" value={director.city} />
+                {director.club && director.club !== '—' && (
+                  <InfoRow icon={Building2} label="Club" value={director.club} />
+                )}
                 {committee && <InfoRow icon={User} label="Committee" value={committee.name} />}
-                <InfoRow
-                  icon={Mail}
-                  label="Email"
-                  value={director.email}
-                  href={`mailto:${director.email}`}
-                />
-                <InfoRow
-                  icon={Phone}
-                  label="Phone"
-                  value={director.phone}
-                  href={`tel:${director.phone.replace(/\s/g, '')}`}
-                />
+                {director.email && (
+                  <InfoRow
+                    icon={Mail}
+                    label="Email"
+                    value={director.email}
+                    href={`mailto:${director.email}`}
+                  />
+                )}
               </dl>
-
-              <div className="mt-6 border-t border-divider pt-5">
-                <h3 className="text-sm font-bold text-brand-bluedark">Classification</h3>
-                <p className="mt-2 text-[14px] font-medium text-ink">{director.classification}</p>
-              </div>
             </div>
           </div>
         </div>

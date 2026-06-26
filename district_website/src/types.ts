@@ -6,7 +6,6 @@ export interface CalendarEntry {
   /** ISO date string. Displayed as "DD-MM". */
   date: string
   type: EntryType
-  clubName?: string
 }
 
 export interface DayMarkers {
